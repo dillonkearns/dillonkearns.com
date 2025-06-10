@@ -16,6 +16,7 @@ import PagesMsg exposing (PagesMsg)
 import Route
 import RouteBuilder exposing (App, StatefulRoute, StatelessRoute)
 import Shared
+import Signup
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
 import Task
@@ -201,6 +202,7 @@ view app shared model =
                     ]
                 ]
             ]
+        , Html.div [ Attr.class "mt-8" ] [ Signup.view ]
         , videoSection
         , eventsSection app.data.events model.zone
         , Footer.footer True
