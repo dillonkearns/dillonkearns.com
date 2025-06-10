@@ -168,15 +168,6 @@ view app shared model =
                         , Html.p
                             [ Attr.class "mt-8 text-lg font-medium text-gray-600 sm:text-xl" ]
                             [ Html.text "Adding charm and character to Santa Barbara’s restaurants, wineries, bars, and private events through timeless Jazz Standards." ]
-                        , Html.ul
-                            [ Attr.class "mt-6 space-y-1.5 text-lg text-gray-600 sm:text-xl" ]
-                            [ Html.li [ Attr.class "before:content-['•'] before:mr-1.5 before:text-indigo-500 font-normal" ]
-                                [ Html.text "Intimate solo piano" ]
-                            , Html.li [ Attr.class "before:content-['•'] before:mr-1.5 before:text-indigo-500 font-normal" ]
-                                [ Html.text "Dynamic duos with Jazz vocalists and instrumentalists" ]
-                            , Html.li [ Attr.class "before:content-['•'] before:mr-1.5 before:text-indigo-500 font-normal" ]
-                                [ Html.text "Jazz combos" ]
-                            ]
                         , Html.div
                             [ Attr.class "mt-10 flex items-center gap-x-6"
                             ]
