@@ -10,23 +10,30 @@ view params =
         [ Attr.class "bg-indigo-700 py-16 sm:py-24 lg:py-32"
         ]
         [ Html.div
-            [ Attr.class "mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-12 lg:gap-8 lg:px-8"
+            [ Attr.class "mx-auto max-w-2xl px-6 lg:px-8"
             ]
-            [ Html.h2
-                [ Attr.class "max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:col-span-7"
+            [ Html.div
+                [ Attr.class "text-center mb-8"
                 ]
-                [ Html.text "Get updates on my upcoming Santa Barbara shows and stories from the local music scene." ]
+                [ Html.h1
+                    [ Attr.class "text-4xl font-bold tracking-tight text-white sm:text-5xl mb-4"
+                    ]
+                    [ Html.text "Stay Connected" ]
+                , Html.p
+                    [ Attr.class "text-lg text-white/90 max-w-xl mx-auto"
+                    ]
+                    [ Html.text "Get updates on my upcoming Santa Barbara shows and stories from the local music scene." ]
+                ]
             , Html.form
                 [ Attr.action "https://app.kit.com/forms/8167571/subscriptions"
                 , Attr.method "POST"
-                , Attr.class "w-full max-w-md lg:col-span-5 lg:pt-2 space-y-4"
+                , Attr.class "max-w-md mx-auto"
                 ]
                 [ Html.div
-                    [ Attr.class "flex flex-col gap-y-4"
+                    [ Attr.class "space-y-4"
                     ]
                     [ Html.div
-                        [ Attr.class "flex gap-x-4"
-                        ]
+                        []
                         [ Html.label
                             [ Attr.for "first_name"
                             , Attr.class "sr-only"
@@ -37,7 +44,7 @@ view params =
                              , Attr.name "fields[first_name]"
                              , Attr.id "first_name"
                              , Attr.placeholder "First name"
-                             , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
+                             , Attr.class "w-full rounded-md bg-white/10 px-3.5 py-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
                              ]
                                 ++ (case params.firstName of
                                         Just firstName ->
@@ -48,7 +55,10 @@ view params =
                                    )
                             )
                             []
-                        , Html.label
+                        ]
+                    , Html.div
+                        []
+                        [ Html.label
                             [ Attr.for "email_address"
                             , Attr.class "sr-only"
                             ]
@@ -60,7 +70,7 @@ view params =
                              , Attr.required True
                              , Attr.attribute "autocomplete" "email"
                              , Attr.placeholder "Your email"
-                             , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
+                             , Attr.class "w-full rounded-md bg-white/10 px-3.5 py-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
                              ]
                                 ++ (case params.email of
                                         Just email ->
@@ -71,15 +81,15 @@ view params =
                                    )
                             )
                             []
-                        , Html.button
-                            [ Attr.type_ "submit"
-                            , Attr.class "flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
-                            ]
-                            [ Html.text "Sign Up" ]
                         ]
+                    , Html.button
+                        [ Attr.type_ "submit"
+                        , Attr.class "w-full rounded-md bg-white px-3.5 py-3 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
+                        ]
+                        [ Html.text "Sign Up" ]
                     ]
                 , Html.p
-                    [ Attr.class "mt-4 text-sm/6 text-gray-300"
+                    [ Attr.class "mt-6 text-sm text-center text-gray-300"
                     ]
                     [ Html.text "Hit unsubscribe any time! I only send occasionally updates about my music and upcoming shows."
                     ]
