@@ -15,7 +15,7 @@ view =
             [ Html.h2
                 [ Attr.class "max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:col-span-7"
                 ]
-                [ Html.text "Want updates on jazz performances and new music? Sign up for our newsletter." ]
+                [ Html.text "Get updates on my upcoming Santa Barbara shows and stories from the local music scene." ]
             , Html.form
                 [ Attr.action "https://app.kit.com/forms/8167571/subscriptions"
                 , Attr.method "POST"
@@ -51,27 +51,21 @@ view =
                             , Attr.id "email_address"
                             , Attr.required True
                             , Attr.attribute "autocomplete" "email"
-                            , Attr.placeholder "Enter your email"
+                            , Attr.placeholder "Your email"
                             , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
                             ]
                             []
                         , Html.button
                             [ Attr.type_ "submit"
-                            , Attr.class "flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            , Attr.class "flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
                             ]
-                            [ Html.text "Subscribe" ]
+                            [ Html.text "Sign Up" ]
                         ]
                     ]
                 , Html.p
                     [ Attr.class "mt-4 text-sm/6 text-gray-300"
                     ]
-                    [ Html.text "We care about your data. Read our "
-                    , Html.a
-                        [ Attr.href "#"
-                        , Attr.class "font-semibold text-white hover:text-indigo-50"
-                        ]
-                        [ Html.text "privacy policy" ]
-                    , Html.text "."
+                    [ Html.text "Hit unsubscribe any time! I only send occasionally updates about my music and upcoming shows."
                     ]
                 ]
             ]
