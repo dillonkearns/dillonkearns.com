@@ -138,30 +138,7 @@ view app shared model =
                             , Attr.alt "Dillon KearnsJazz Piano"
                             ]
                             []
-                        , Html.div
-                            [ Attr.class "hidden sm:mt-32 sm:flex lg:mt-16"
-                            ]
-                            [ Html.div
-                                [ Attr.class "relative rounded-full px-3 py-1 text-sm/6 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
-                                ]
-                                [ Html.text "  Next Event: Fox Wine Co., Sunday, March 23, 5:00–7:00 PM. "
-                                , Html.a
-                                    [ Attr.href "#upcoming-shows"
-                                    , Attr.class "font-semibold whitespace-nowrap text-indigo-600"
-                                    ]
-                                    [ Html.span
-                                        [ Attr.class "absolute inset-0"
-                                        , Attr.attribute "aria-hidden" "true"
-                                        ]
-                                        []
-                                    , Html.text "See Upcoming Shows "
-                                    , Html.span
-                                        [ Attr.attribute "aria-hidden" "true"
-                                        ]
-                                        [ Html.text "→" ]
-                                    ]
-                                ]
-                            ]
+                        , nextEventBanner app.data.events model.zone
                         , Html.h1
                             [ Attr.class "mt-12 text-5xl font-semibold tracking-tight text-pretty text-gray-900 sm:mt-10 sm:text-7xl"
                             ]
@@ -476,3 +453,64 @@ video1 =
             ]
             []
         ]
+
+
+nextEventBanner : List Event -> Time.Zone -> Html msg
+nextEventBanner events zone =
+    case List.head events of
+        Just event ->
+            Html.div
+                [ Attr.class "hidden sm:mt-32 sm:flex lg:mt-16"
+                ]
+                [ Html.div
+                    [ Attr.class "relative rounded-full px-3 py-1 text-sm/6 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                    ]
+                    [ Html.text ("  Next Event: " ++ event.location.name ++ ", " ++ formatEventDate zone event ++ " ")
+                    , Html.a
+                        [ Attr.href "#upcoming-shows"
+                        , Attr.class "font-semibold whitespace-nowrap text-indigo-600"
+                        ]
+                        [ Html.span
+                            [ Attr.class "absolute inset-0"
+                            , Attr.attribute "aria-hidden" "true"
+                            ]
+                            []
+                        , Html.text "See Upcoming Shows "
+                        , Html.span
+                            [ Attr.attribute "aria-hidden" "true"
+                            ]
+                            [ Html.text "→" ]
+                        ]
+                    ]
+                ]
+
+        Nothing ->
+            Html.text ""
+
+
+formatEventDate : Time.Zone -> Event -> String
+formatEventDate zone event =
+    DateFormat.format
+        [ DateFormat.dayOfWeekNameFull
+        , DateFormat.text ", "
+        , DateFormat.monthNameFull
+        , DateFormat.text " "
+        , DateFormat.dayOfMonthNumber
+        , DateFormat.text ", "
+        , DateFormat.hourFixed
+        , DateFormat.text ":"
+        , DateFormat.minuteFixed
+        , DateFormat.text "–"
+        ]
+        zone
+        event.dateTimeStart
+        ++ DateFormat.format
+            [ DateFormat.hourFixed
+            , DateFormat.text ":"
+            , DateFormat.minuteFixed
+            , DateFormat.text " "
+            , DateFormat.amPmUppercase
+            ]
+            zone
+            event.dateTimeEnd
+        ++ "."
