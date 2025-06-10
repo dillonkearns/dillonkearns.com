@@ -7,6 +7,7 @@ module Route.Signup exposing (Model, Msg, RouteParams, route, Data, ActionData)
 -}
 
 import BackendTask
+import Dict
 import Effect
 import FatalError
 import Footer
@@ -110,10 +111,19 @@ view :
     -> Model
     -> View.View (PagesMsg.PagesMsg Msg)
 view app shared model =
+    let
+        firstName : Maybe String
+        firstName =
+            app.url |> Maybe.andThen (\foo -> foo.query |> Dict.get "first" |> Maybe.andThen List.head)
+
+        email : Maybe String
+        email =
+            app.url |> Maybe.andThen (\foo -> foo.query |> Dict.get "email" |> Maybe.andThen List.head)
+    in
     { title = "Newsletter Signup - Dillon Kearns Jazz Pianist"
     , body =
         [ header
-        , Signup.view
+        , Signup.view { firstName = firstName, email = email }
         , Footer.footer False
         ]
     }

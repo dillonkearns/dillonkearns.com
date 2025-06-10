@@ -179,7 +179,7 @@ view app shared model =
                     ]
                 ]
             ]
-        , Html.div [ Attr.class "mt-8" ] [ Signup.view ]
+        , Html.div [ Attr.class "mt-8" ] [ Signup.view { firstName = Nothing, email = Nothing } ]
         , videoSection
         , eventsSection app.data.events model.zone
         , Footer.footer True

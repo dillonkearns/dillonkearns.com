@@ -4,8 +4,8 @@ import Html exposing (Html)
 import Html.Attributes as Attr
 
 
-view : Html msg
-view =
+view : { firstName : Maybe String, email : Maybe String } -> Html msg
+view params =
     Html.div
         [ Attr.class "bg-indigo-700 py-16 sm:py-24 lg:py-32"
         ]
@@ -33,12 +33,20 @@ view =
                             ]
                             [ Html.text "First Name" ]
                         , Html.input
-                            [ Attr.type_ "text"
-                            , Attr.name "fields[first_name]"
-                            , Attr.id "first_name"
-                            , Attr.placeholder "First name"
-                            , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
-                            ]
+                            ([ Attr.type_ "text"
+                             , Attr.name "fields[first_name]"
+                             , Attr.id "first_name"
+                             , Attr.placeholder "First name"
+                             , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
+                             ]
+                                ++ (case params.firstName of
+                                        Just firstName ->
+                                            [ Attr.value firstName ]
+
+                                        Nothing ->
+                                            []
+                                   )
+                            )
                             []
                         , Html.label
                             [ Attr.for "email_address"
@@ -46,14 +54,22 @@ view =
                             ]
                             [ Html.text "Email address" ]
                         , Html.input
-                            [ Attr.type_ "email"
-                            , Attr.name "email_address"
-                            , Attr.id "email_address"
-                            , Attr.required True
-                            , Attr.attribute "autocomplete" "email"
-                            , Attr.placeholder "Your email"
-                            , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
-                            ]
+                            ([ Attr.type_ "email"
+                             , Attr.name "email_address"
+                             , Attr.id "email_address"
+                             , Attr.required True
+                             , Attr.attribute "autocomplete" "email"
+                             , Attr.placeholder "Your email"
+                             , Attr.class "min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
+                             ]
+                                ++ (case params.email of
+                                        Just email ->
+                                            [ Attr.value email ]
+
+                                        Nothing ->
+                                            []
+                                   )
+                            )
                             []
                         , Html.button
                             [ Attr.type_ "submit"
