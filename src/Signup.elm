@@ -91,7 +91,7 @@ view params =
                 , Html.p
                     [ Attr.class "mt-6 text-sm text-center text-gray-300"
                     ]
-                    [ Html.text "Hit unsubscribe any time! I only send occasionally updates about my music and upcoming shows."
+                    [ Html.text "Hit unsubscribe any time! I only send occasional updates about my music and upcoming shows."
                     ]
                 ]
             ]
