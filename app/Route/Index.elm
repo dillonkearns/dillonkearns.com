@@ -142,7 +142,7 @@ view app shared model =
                                 ]
                                 []
                             , Html.div
-                                [ Attr.class "flex gap-x-4"
+                                [ Attr.class "flex gap-x-4 shadow-md p-2"
                                 ]
                                 (socialIcons False)
                             ]
