@@ -124,7 +124,8 @@ view app shared model =
     , body =
         [ header
         , Signup.view { firstName = firstName, email = email }
-        , Footer.footer False
+
+        --, Footer.footer False
         ]
     }
 
