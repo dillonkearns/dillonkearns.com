@@ -15,8 +15,9 @@ view params =
             [ Html.div
                 [ Attr.class "text-center mb-8"
                 ]
-                [ Html.h1
+                [ Html.h2
                     [ Attr.class "text-4xl font-bold tracking-tight text-white sm:text-5xl mb-4"
+                    , Attr.id "signup"
                     ]
                     [ Html.text "Stay Connected" ]
                 , Html.p

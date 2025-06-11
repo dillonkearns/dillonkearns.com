@@ -149,21 +149,21 @@ view app shared model =
                         , Html.div
                             [ Attr.class "mt-10 flex items-center gap-x-6"
                             ]
-                            [ Route.Contact
+                            [ Html.a
+                                [ Attr.href "#signup"
+                                , Attr.class "rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                ]
+                                [ Html.text "Stay in the Loop" ]
+                            , Route.Contact
                                 |> Route.link
-                                    [ Attr.class "rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    [ Attr.class "text-sm/6 font-semibold text-gray-900"
                                     ]
-                                    [ Html.text "Inquire About Booking" ]
-                            , Html.a
-                                [ Attr.href "#event-clips"
-                                , Attr.class "text-sm/6 font-semibold text-gray-900"
-                                ]
-                                [ Html.text "See Event Clips "
-                                , Html.span
-                                    [ Attr.attribute "aria-hidden" "true"
+                                    [ Html.text "Inquire About Booking "
+                                    , Html.span
+                                        [ Attr.attribute "aria-hidden" "true"
+                                        ]
+                                        [ Html.text "→" ]
                                     ]
-                                    [ Html.text "→" ]
-                                ]
                             ]
                         ]
                     ]
