@@ -1,4 +1,4 @@
-module MarkdownHtmlRenderer exposing (renderer)
+module MarkdownHtmlRenderer exposing (renderer, renderEmailTemplate)
 
 import Html.String as Html exposing (Html)
 import Html.String.Attributes as Attr
@@ -18,14 +18,17 @@ renderer =
                     Html.h1 [] children
 
                 Block.H2 ->
-                    Html.h2 
-                        [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
-                        , Attr.style "font-size" "24px"
-                        , Attr.style "color" "rgb(0, 0, 0)"
-                        , Attr.style "font-weight" "800"
-                        , Attr.style "line-height" "1"
-                        ] 
-                        children
+                    Html.div [ Attr.style "margin" "0", Attr.style "padding" "24px 0 16px 0" ]
+                        [ Html.h2 
+                            [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
+                            , Attr.style "font-size" "24px"
+                            , Attr.style "color" "rgb(0, 0, 0)"
+                            , Attr.style "font-weight" "800"
+                            , Attr.style "line-height" "1"
+                            , Attr.style "margin" "0"
+                            ] 
+                            children
+                        ]
 
                 Block.H3 ->
                     Html.h3 [] children
@@ -38,13 +41,18 @@ renderer =
 
                 Block.H6 ->
                     Html.h6 [] children
-    , paragraph = Html.p 
-        [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
-        , Attr.style "font-size" "18px"
-        , Attr.style "color" "#353535"
-        , Attr.style "font-weight" "400"
-        , Attr.style "line-height" "1.5"
-        ]
+    , paragraph = \children ->
+        Html.div [ Attr.style "margin" "0", Attr.style "padding" "0 0 16px 0" ]
+            [ Html.p 
+                [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
+                , Attr.style "font-size" "18px"
+                , Attr.style "color" "#353535"
+                , Attr.style "font-weight" "400"
+                , Attr.style "line-height" "1.5"
+                , Attr.style "margin" "0"
+                ]
+                children
+            ]
     , strikethrough = Html.del []
     , hardLineBreak = Html.br [] []
     , blockQuote = Html.blockquote []
@@ -229,3 +237,83 @@ renderer =
             in
             Html.td attrs
     }
+
+
+renderEmailTemplate : List (Html Never) -> Html Never
+renderEmailTemplate content =
+    Html.div [ Attr.style "background-color" "#ffffff" ]
+        [ Html.table
+            [ Attr.attribute "role" "presentation"
+            , Attr.attribute "cellpadding" "0"
+            , Attr.attribute "cellspacing" "0"
+            , Attr.style "background" "#f3f3f3!important"
+            , Attr.style "width" "100%"
+            , Attr.attribute "bgcolor" "#ffffff"
+            ]
+            [ Html.tbody []
+                [ Html.tr []
+                    [ Html.td []
+                        [ Html.div
+                            [ Attr.style "padding-top" "0"
+                            , Attr.style "padding-left" "0"
+                            , Attr.style "padding-bottom" "30px"
+                            , Attr.style "padding-right" "0"
+                            , Attr.style "margin" "0 auto"
+                            , Attr.style "max-width" "100%"
+                            ]
+                            [ Html.table
+                                [ Attr.attribute "cellpadding" "0"
+                                , Attr.attribute "cellspacing" "0"
+                                , Attr.attribute "bgcolor" "#f3f3f3"
+                                , Attr.style "width" "100%"
+                                , Attr.style "margin" "0 auto"
+                                , Attr.style "background-color" "#f3f3f3"
+                                ]
+                                [ Html.tbody []
+                                    [ Html.tr []
+                                        [ Html.td []
+                                            [ Html.div [ Attr.style "margin" "0px auto 0px auto" ]
+                                                [ Html.node "center" []
+                                                    [ Html.table
+                                                        [ Attr.attribute "cellpadding" "0"
+                                                        , Attr.attribute "cellspacing" "0"
+                                                        , Attr.style "width" "100%"
+                                                        , Attr.style "margin" "0 auto"
+                                                        , Attr.style "max-width" "100%"
+                                                        ]
+                                                        [ Html.tbody []
+                                                            [ Html.tr []
+                                                                [ Html.td [] []
+                                                                , Html.td
+                                                                    [ Attr.width 100
+                                                                    , Attr.style "width" "100%"
+                                                                    , Attr.style "background-color" "#ffffff"
+                                                                    , Attr.style "border-radius" "0px"
+                                                                    , Attr.style "box-sizing" "border-box"
+                                                                    , Attr.attribute "bgcolor" "#FFFFFF"
+                                                                    ]
+                                                                    [ Html.div [ Attr.style "padding" "40px 0px 40px 0px" ]
+                                                                        [ Html.div
+                                                                            [ Attr.style "margin-left" "auto"
+                                                                            , Attr.style "margin-right" "auto"
+                                                                            , Attr.style "max-width" "640px"
+                                                                            ]
+                                                                            content
+                                                                        ]
+                                                                    ]
+                                                                , Html.td [] []
+                                                                ]
+                                                            ]
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]

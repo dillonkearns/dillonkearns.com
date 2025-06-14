@@ -67,8 +67,8 @@ newsletterToFeedItem newsletter =
                         let
                             bodyHtml =
                                 renderedHtml
-                                    |> List.map (Html.String.toString 0)
-                                    |> String.join ""
+                                    |> MarkdownHtmlRenderer.renderEmailTemplate
+                                    |> Html.String.toString 0
                         in
                         BackendTask.succeed
                             { title = newsletter.metadata.title

@@ -115,10 +115,12 @@ view app shared =
             case renderedResult of
                 Ok rendered ->
                     rendered
-                        |> List.map (Html.String.toHtml >> Html.map never)
+                        |> MarkdownHtmlRenderer.renderEmailTemplate
+                        |> Html.String.toHtml
+                        |> Html.map never
 
                 Err error ->
-                    [ Html.text ("Error rendering markdown: " ++ error) ]
+                    Html.text ("Error rendering markdown: " ++ error)
     in
     { title = app.data.newsletter.metadata.title ++ " - Preview"
     , body =
@@ -156,12 +158,13 @@ view app shared =
                 ]
             , Html.div
                 [ Attr.style "border" "1px solid #ddd"
-                , Attr.style "padding" "30px"
+                , Attr.style "padding" "0"
                 , Attr.style "background" "white"
                 , Attr.style "border-radius" "8px"
                 , Attr.style "box-shadow" "0 2px 4px rgba(0,0,0,0.1)"
+                , Attr.style "overflow" "hidden"
                 ]
-                htmlContent
+                [ htmlContent ]
             , Html.div
                 [ Attr.style "margin-top" "20px"
                 , Attr.style "padding" "15px"
