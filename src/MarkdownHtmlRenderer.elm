@@ -38,7 +38,13 @@ renderer =
 
                 Block.H6 ->
                     Html.h6 [] children
-    , paragraph = Html.p []
+    , paragraph = Html.p 
+        [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
+        , Attr.style "font-size" "18px"
+        , Attr.style "color" "#353535"
+        , Attr.style "font-weight" "400"
+        , Attr.style "line-height" "1.5"
+        ]
     , strikethrough = Html.del []
     , hardLineBreak = Html.br [] []
     , blockQuote = Html.blockquote []
