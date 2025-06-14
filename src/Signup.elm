@@ -23,7 +23,7 @@ view params =
                 , Html.p
                     [ Attr.class "text-lg text-white/90 max-w-xl mx-auto"
                     ]
-                    [ Html.text "Get updates on my upcoming shows and stories from the local jazz scene." ]
+                    [ Html.text "Get updates on my upcoming shows, video highlights, and stories from the local jazz scene." ]
                 ]
             , Html.form
                 [ Attr.action "https://app.kit.com/forms/8167571/subscriptions"
