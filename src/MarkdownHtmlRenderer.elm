@@ -18,7 +18,14 @@ renderer =
                     Html.h1 [] children
 
                 Block.H2 ->
-                    Html.h2 [] children
+                    Html.h2 
+                        [ Attr.style "font-family" "-apple-system, BlinkMacSystemFont, sans-serif"
+                        , Attr.style "font-size" "24px"
+                        , Attr.style "color" "rgb(0, 0, 0)"
+                        , Attr.style "font-weight" "800"
+                        , Attr.style "line-height" "1"
+                        ] 
+                        children
 
                 Block.H3 ->
                     Html.h3 [] children
