@@ -153,7 +153,7 @@ view app shared model =
                             [ Html.text "Dillon Kearns Jazz Pianist" ]
                         , Html.p
                             [ Attr.class "mt-8 text-lg font-medium text-gray-600 sm:text-xl" ]
-                            [ Html.text "Adding charm and character to Santa Barbara’s restaurants, wineries, bars, and private events through timeless Jazz Standards." ]
+                            [ Html.text "Bringing live jazz to Santa Barbara's vibrant restaurants, wineries, bars, and private events." ]
                         , Html.div
                             [ Attr.class "mt-10 flex items-center gap-x-6"
                             ]
