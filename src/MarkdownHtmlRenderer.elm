@@ -6,6 +6,7 @@ import Markdown.Block as Block
 import Markdown.Html
 import Markdown.Renderer
 import Site
+import Url
 
 
 renderer : Markdown.Renderer.Renderer (Html Never)
@@ -128,7 +129,36 @@ renderer =
                                 itemBlocks
                         )
                 )
-    , html = Markdown.Html.oneOf []
+    , html =
+        Markdown.Html.oneOf
+            [ Markdown.Html.tag "youtube-embed"
+                (\src _ ->
+                    Html.a
+                        [ Attr.href src
+                        , Attr.style "display" "block"
+                        , Attr.style "width" "100%"
+                        , Attr.style "max-width" "480px"
+                        , Attr.style "margin" "0 auto"
+                        , Attr.style "border" "0"
+                        , Attr.style "text-decoration" "none"
+                        , Attr.target "_blank"
+                        ]
+                        [ Html.img
+                            [ Attr.alt "video preview"
+                            , Attr.src ("https://functions-js.convertkit.com/playbutton?play=%23ffffff&accent=%23f00505&thumbnailof=" ++ (src |> Url.percentEncode) ++ "&width=480&height=270&fit=contain")
+                            , Attr.width 480
+                            , Attr.height 270
+                            , Attr.style "display" "block"
+                            , Attr.style "border-radius" "4px"
+                            , Attr.style "max-width" "480px"
+                            , Attr.style "width" "100%"
+                            , Attr.style "height" "auto"
+                            ]
+                            []
+                        ]
+                )
+                |> Markdown.Html.withAttribute "src"
+            ]
     , codeBlock =
         \{ body } ->
             Html.pre []
