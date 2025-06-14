@@ -94,7 +94,7 @@ head app =
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = "Newsletter from " ++ Date.toIsoString app.data.newsletter.metadata.publishAt
+        , description = "Newsletter from " ++ Date.toIsoString app.data.newsletter.publishAt
         , locale = Nothing
         , title = app.data.newsletter.metadata.title
         }
@@ -130,9 +130,9 @@ view app shared =
                             [ Html.text app.data.newsletter.metadata.title ]
                         , Html.time 
                             [ Attr.class "text-gray-600"
-                            , Attr.datetime (Date.toIsoString app.data.newsletter.metadata.publishAt) 
+                            , Attr.datetime (Date.toIsoString app.data.newsletter.publishAt) 
                             ] 
-                            [ Html.text (formatDate app.data.newsletter.metadata.publishAt) ]
+                            [ Html.text (formatDate app.data.newsletter.publishAt) ]
                         ]
                     , Html.div [ Attr.class "prose prose-lg max-w-none" ]
                         content

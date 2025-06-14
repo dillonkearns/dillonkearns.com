@@ -1,6 +1,5 @@
 ---
 title: "Introducing Soir Noir (and why we chose that name)"
-publishAt: "2025-06-20"
 ---
 
 We're heading back to one of my favorite venues!

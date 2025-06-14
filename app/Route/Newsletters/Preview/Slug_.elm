@@ -144,7 +144,7 @@ view app shared =
                     ]
                 , Html.p [ Attr.style "margin" "0 0 10px 0" ] 
                     [ Html.strong [] [ Html.text "Publish Date: " ]
-                    , Html.text (Date.toIsoString app.data.newsletter.metadata.publishAt) 
+                    , Html.text (Date.toIsoString app.data.newsletter.publishAt) 
                     ]
                 , Html.p [ Attr.style "margin" "0" ] 
                     [ Html.strong [] [ Html.text "RSS Feed: " ]
