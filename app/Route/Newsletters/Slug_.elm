@@ -19,6 +19,7 @@ import PagesMsg exposing (PagesMsg)
 import Route
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
+import Signup
 import View exposing (View)
 
 
@@ -138,18 +139,8 @@ view app shared =
                         ]
                     , Html.div [ Attr.class "prose prose-lg max-w-none" ]
                         content
-                    , Html.footer [ Attr.class "mt-12 pt-8 border-t" ]
-                        [ Html.div [ Attr.class "bg-blue-50 rounded-lg p-6" ]
-                            [ Html.h3 [ Attr.class "text-lg font-semibold mb-2" ] 
-                                [ Html.text "Get updates on upcoming shows" ]
-                            , Html.p [ Attr.class "text-gray-700 mb-4" ] 
-                                [ Html.text "Join my newsletter for stories from the local jazz scene and updates on where to catch live music." ]
-                            , Html.a 
-                                [ Attr.href "/signup"
-                                , Attr.class "inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                                ] 
-                                [ Html.text "Subscribe to Newsletter" ]
-                            ]
+                    , Html.div [ Attr.class "mt-12 pt-8 border-t" ]
+                        [ Signup.view { firstName = Nothing, email = Nothing }
                         ]
                     ]
                 ]
