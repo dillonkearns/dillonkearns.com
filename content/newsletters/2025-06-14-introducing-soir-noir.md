@@ -6,13 +6,14 @@ We're heading back to one of my favorite venues!
 
 **Soir Noir** (Brandon Kinalele on guitar/vocals and myself on piano)  
 **Fox Wine Co.** in the Funk Zone  
-**Sunday, January 19** 4:30-6:30pm
+**Sunday, July 19** 4:30-6:30pm
 
 To me, the Fox Wine/Topa Topa patio area embodies the classic Funk Zone vibe. It's an awesome spot to grab a drink and enjoy some live music. I'd love to see you there!
 
 ## What is Soir Noir?
 
 You may be wondering, what is Soir Noir? After wracking our brains for many weeks, Brandon Kinalele and I came up with a name that we both love for our Jazz project. It is French for "Black Night", and it is a nod to the American cinema tradition of Film Noir which is of course inseparable from jazz.
+
 Here's a taste of our sound from our last show at Fox Wine (and you can get a sense of what a beautiful spot it is, too!):
 
 <youtube-embed src="https://www.youtube.com/watch?v=4-pFT1gSXcA"></youtube-embed>
@@ -27,4 +28,5 @@ Best,
 
 Dillon
 
-P.S. If you know other music lovers who might enjoy these stories, feel free to forward this along!
+P.S. I'm just starting this newsletter to keep people in the loop about my shows around Santa Barbara and share some of the music I'm working on. If you know someone who might be interested, they can sign up with [my web site signup form](https://dillonkearns.com/signup/).
+ If you know other music lovers who might enjoy these stories, feel free to forward this along!
