@@ -91,7 +91,7 @@ newsletterToFeedItem newsletter =
                                         , categories = []
                                         , author = "Dillon Kearns"
                                         , pubDate = Rss.Date newsletter.publishAt
-                                        , content = Just plainText
+                                        , content = Nothing
                                         , contentEncoded = Just bodyHtml
                                         , enclosure = Nothing
                                         }
