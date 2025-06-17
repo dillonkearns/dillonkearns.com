@@ -59,31 +59,46 @@ newsletterFeedItems =
 newsletterToFeedItem : Newsletter.Newsletter -> BackendTask FatalError Rss.Item
 newsletterToFeedItem newsletter =
     newsletter.filePath
-        |> MarkdownCodec.withoutFrontmatter MarkdownHtmlRenderer.renderer
+        |> BackendTask.File.bodyWithoutFrontmatter
+        |> BackendTask.allowFatal
         |> BackendTask.andThen
-            (\blocks ->
-                case Markdown.Renderer.render MarkdownHtmlRenderer.renderer blocks of
-                    Ok renderedHtml ->
-                        let
-                            bodyHtml =
-                                renderedHtml
-                                    |> MarkdownHtmlRenderer.renderEmailTemplate
-                                    |> Html.String.toString 0
-                        in
-                        BackendTask.succeed
-                            { title = newsletter.metadata.title
-                            , description = newsletter.metadata.title
-                            , url = "/newsletters/" ++ newsletter.slug
-                            , categories = []
-                            , author = "Dillon Kearns"
-                            , pubDate = Rss.Date newsletter.publishAt
-                            , content = Just bodyHtml
-                            , contentEncoded = Just bodyHtml
-                            , enclosure = Nothing
-                            }
+            (\markdownContent ->
+                newsletter.filePath
+                    |> MarkdownCodec.withoutFrontmatter MarkdownHtmlRenderer.renderer
+                    |> BackendTask.andThen
+                        (\blocks ->
+                            case Markdown.Renderer.render MarkdownHtmlRenderer.renderer blocks of
+                                Ok renderedHtml ->
+                                    let
+                                        -- Just the content HTML without email template wrapper
+                                        bodyHtml =
+                                            renderedHtml
+                                                |> List.map (Html.String.toString 0)
+                                                |> String.join ""
+                                        
+                                        -- Extract plain text from markdown
+                                        plainText =
+                                            markdownContent
+                                                |> String.lines
+                                                |> List.map String.trim
+                                                |> List.filter (not << String.isEmpty)
+                                                |> String.join " "
+                                    in
+                                    BackendTask.succeed
+                                        { title = newsletter.metadata.title
+                                        , description = newsletter.metadata.title
+                                        , url = "/newsletters/" ++ newsletter.slug
+                                        , categories = []
+                                        , author = "Dillon Kearns"
+                                        , pubDate = Rss.Date newsletter.publishAt
+                                        , content = Just plainText
+                                        , contentEncoded = Just bodyHtml
+                                        , enclosure = Nothing
+                                        }
 
-                    Err error ->
-                        BackendTask.fail (FatalError.fromString ("Markdown rendering error: " ++ error))
+                                Err error ->
+                                    BackendTask.fail (FatalError.fromString ("Markdown rendering error: " ++ error))
+                        )
             )
 
 

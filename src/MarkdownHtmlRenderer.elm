@@ -1,4 +1,4 @@
-module MarkdownHtmlRenderer exposing (renderer, renderEmailTemplate)
+module MarkdownHtmlRenderer exposing (renderer, renderEmailTemplate, rssRenderer)
 
 import Html.String as Html exposing (Html)
 import Html.String.Attributes as Attr
@@ -294,3 +294,177 @@ renderEmailTemplate content =
                 ]
             ]
         ]
+
+
+rssRenderer : Markdown.Renderer.Renderer (Html Never)
+rssRenderer =
+    { heading =
+        \{ level, children } ->
+            case level of
+                Block.H1 ->
+                    Html.h1 [] children
+
+                Block.H2 ->
+                    Html.h2 [] children
+
+                Block.H3 ->
+                    Html.h3 [] children
+
+                Block.H4 ->
+                    Html.h4 [] children
+
+                Block.H5 ->
+                    Html.h5 [] children
+
+                Block.H6 ->
+                    Html.h6 [] children
+    , paragraph = Html.p []
+    , strikethrough = Html.del []
+    , hardLineBreak = Html.br [] []
+    , blockQuote = Html.blockquote []
+    , strong = Html.strong []
+    , emphasis = Html.em []
+    , codeSpan = \content -> Html.code [] [ Html.text content ]
+    , link =
+        \link content ->
+            let
+                fullUrl =
+                    if link.destination |> String.startsWith "/" then
+                        Site.config.canonicalUrl ++ link.destination
+
+                    else
+                        link.destination
+            in
+            case link.title of
+                Just title ->
+                    Html.a
+                        [ Attr.href fullUrl
+                        , Attr.title title
+                        ]
+                        content
+
+                Nothing ->
+                    Html.a [ Attr.href fullUrl ] content
+    , image =
+        \imageInfo ->
+            case imageInfo.title of
+                Just title ->
+                    Html.img
+                        [ Attr.src imageInfo.src
+                        , Attr.alt imageInfo.alt
+                        , Attr.title title
+                        ]
+                        []
+
+                Nothing ->
+                    Html.img
+                        [ Attr.src imageInfo.src
+                        , Attr.alt imageInfo.alt
+                        ]
+                        []
+    , text = Html.text
+    , unorderedList =
+        \items ->
+            Html.ul []
+                (items
+                    |> List.map
+                        (\item ->
+                            case item of
+                                Block.ListItem task children ->
+                                    let
+                                        checkbox =
+                                            case task of
+                                                Block.NoTask ->
+                                                    Html.text ""
+
+                                                Block.IncompleteTask ->
+                                                    Html.input
+                                                        [ Attr.disabled True
+                                                        , Attr.checked False
+                                                        , Attr.type_ "checkbox"
+                                                        ]
+                                                        []
+
+                                                Block.CompletedTask ->
+                                                    Html.input
+                                                        [ Attr.disabled True
+                                                        , Attr.checked True
+                                                        , Attr.type_ "checkbox"
+                                                        ]
+                                                        []
+                                    in
+                                    Html.li [] (checkbox :: children)
+                        )
+                )
+    , orderedList =
+        \startingIndex items ->
+            Html.ol []
+                (items
+                    |> List.map
+                        (\itemBlocks ->
+                            Html.li [] itemBlocks
+                        )
+                )
+    , html =
+        Markdown.Html.oneOf
+            [ Markdown.Html.tag "youtube-embed"
+                (\src _ -> YoutubeEmbed.emailEmbed src)
+                |> Markdown.Html.withAttribute "src"
+            ]
+    , codeBlock =
+        \{ body, language } ->
+            Html.pre []
+                [ Html.code []
+                    [ Html.text body
+                    ]
+                ]
+    , thematicBreak = Html.hr [] []
+    , table = Html.table []
+    , tableHeader = Html.thead []
+    , tableBody = Html.tbody []
+    , tableRow = Html.tr []
+    , tableHeaderCell =
+        \maybeAlignment ->
+            let
+                attrs =
+                    maybeAlignment
+                        |> Maybe.map
+                            (\alignment ->
+                                case alignment of
+                                    Block.AlignLeft ->
+                                        "left"
+
+                                    Block.AlignCenter ->
+                                        "center"
+
+                                    Block.AlignRight ->
+                                        "right"
+                            )
+                        |> Maybe.map Attr.align
+                        |> Maybe.map List.singleton
+                        |> Maybe.withDefault []
+            in
+            Html.th attrs
+    , tableCell =
+        \maybeAlignment ->
+            let
+                attrs =
+                    maybeAlignment
+                        |> Maybe.map
+                            (\alignment ->
+                                case alignment of
+                                    Block.AlignLeft ->
+                                        "left"
+
+                                    Block.AlignCenter ->
+                                        "center"
+
+                                    Block.AlignRight ->
+                                        "right"
+                            )
+                        |> Maybe.map Attr.align
+                        |> Maybe.map List.singleton
+                        |> Maybe.withDefault []
+            in
+            Html.td attrs
+    }
