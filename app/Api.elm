@@ -27,15 +27,16 @@ routes getStaticRoutes htmlToString =
         (newsletterFeedItems
             |> BackendTask.map
                 (\feedItems ->
-                    Rss.generate
-                        { title = "Dillon Kearns Newsletter"
-                        , description = "Get updates on my upcoming shows, video highlights of our music, and stories from the local jazz scene."
-                        , url = Site.config.canonicalUrl ++ "/newsletters"
-                        , lastBuildTime = Pages.builtAt
-                        , generator = Just "elm-pages"
-                        , items = feedItems
-                        , siteUrl = Site.config.canonicalUrl
-                        }
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                        ++ Rss.generate
+                            { title = "Dillon Kearns Newsletter"
+                            , description = "Get updates on my upcoming shows, video highlights of our music, and stories from the local jazz scene."
+                            , url = Site.config.canonicalUrl ++ "/newsletters"
+                            , lastBuildTime = Pages.builtAt
+                            , generator = Just "elm-pages"
+                            , items = feedItems
+                            , siteUrl = Site.config.canonicalUrl
+                            }
                 )
         )
         |> ApiRoute.literal "newsletters"
@@ -75,7 +76,7 @@ newsletterToFeedItem newsletter =
                                             renderedHtml
                                                 |> List.map (Html.String.toString 0)
                                                 |> String.join ""
-                                        
+
                                         -- Extract plain text from markdown
                                         plainText =
                                             markdownContent
