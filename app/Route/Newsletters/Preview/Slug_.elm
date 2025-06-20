@@ -163,6 +163,7 @@ view app shared =
                 , Attr.style "border-radius" "8px"
                 , Attr.style "box-shadow" "0 2px 4px rgba(0,0,0,0.1)"
                 , Attr.style "overflow" "hidden"
+                , Attr.class "tailwind-reset"
                 ]
                 [ htmlContent ]
             , Html.div

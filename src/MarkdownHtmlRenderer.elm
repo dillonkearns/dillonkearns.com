@@ -78,33 +78,83 @@ renderer =
                     Html.a
                         [ Attr.href fullUrl
                         , Attr.title title
+                        , Attr.class "ck-link"
+                        , Attr.style "color" "#3da9f9"
+                        , Attr.target "_blank"
+                        , Attr.rel "noopener noreferrer"
                         ]
                         content
 
                 Nothing ->
-                    Html.a [ Attr.href fullUrl ] content
+                    Html.a 
+                        [ Attr.href fullUrl
+                        , Attr.class "ck-link"
+                        , Attr.style "color" "#3da9f9"
+                        , Attr.target "_blank"
+                        , Attr.rel "noopener noreferrer"
+                        ] 
+                        content
     , image =
         \imageInfo ->
-            case imageInfo.title of
-                Just title ->
-                    Html.img
-                        [ Attr.src imageInfo.src
-                        , Attr.alt imageInfo.alt
-                        , Attr.title title
+            Html.table
+                [ Attr.attribute "width" "100%"
+                , Attr.attribute "border" "0"
+                , Attr.attribute "cellspacing" "0"
+                , Attr.attribute "cellpadding" "0"
+                , Attr.style "text-align" "center"
+                , Attr.style "table-layout" "fixed"
+                , Attr.style "float" "none"
+                ]
+                [ Html.tbody []
+                    [ Html.tr []
+                        [ Html.td [ Attr.align "center" ]
+                            [ Html.node "figure"
+                                [ Attr.style "margin-top" "12px"
+                                , Attr.style "margin-bottom" "12px"
+                                , Attr.style "margin-left" "0"
+                                , Attr.style "margin-right" "0"
+                                , Attr.style "max-width" "800px"
+                                , Attr.style "width" "100%"
+                                ]
+                                [ Html.div [ Attr.style "display" "block" ]
+                                    [ Html.img
+                                        ([ Attr.src imageInfo.src
+                                        , Attr.alt imageInfo.alt
+                                        , Attr.width 800
+                                        , Attr.attribute "height" "auto"
+                                        , Attr.style "display" "block"
+                                        , Attr.style "border-radius" "4px 4px 4px 4px"
+                                        , Attr.style "width" "800px"
+                                        , Attr.style "height" "auto"
+                                        , Attr.style "object-fit" "contain"
+                                        ] ++ (case imageInfo.title of
+                                            Just title -> [ Attr.title title ]
+                                            Nothing -> []
+                                        ))
+                                        []
+                                    ]
+                                , Html.node "figcaption"
+                                    [ Attr.style "text-align" "center"
+                                    , Attr.style "display" "block"
+                                    ]
+                                    [ Html.text imageInfo.alt ]
+                                ]
+                            ]
                         ]
-                        []
-
-                Nothing ->
-                    Html.img
-                        [ Attr.src imageInfo.src
-                        , Attr.alt imageInfo.alt
-                        ]
-                        []
+                    ]
+                ]
     , text =
         Html.text
     , unorderedList =
         \items ->
-            Html.ul []
+            Html.ul 
+                [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                , Attr.style "font-size" "18px"
+                , Attr.style "color" "#353535"
+                , Attr.style "font-weight" "400"
+                , Attr.style "line-height" "1.5"
+                , Attr.style "text-align" "left"
+                ]
                 (items
                     |> List.map
                         (\item ->
@@ -132,7 +182,10 @@ renderer =
                                                         ]
                                                         []
                                     in
-                                    Html.li [] (checkbox :: children)
+                                    Html.li [] 
+                                        (checkbox :: 
+                                            [ Html.span [] children ]
+                                        )
                         )
                 )
     , orderedList =
@@ -156,6 +209,38 @@ renderer =
             [ Markdown.Html.tag "youtube-embed"
                 (\src _ -> YoutubeEmbed.emailEmbed src)
                 |> Markdown.Html.withAttribute "src"
+            , Markdown.Html.tag "button"
+                (\href children ->
+                    Html.table [ Attr.width 100, Attr.style "width" "100%" ]
+                        [ Html.tbody []
+                            [ Html.tr []
+                                [ Html.td [ Attr.align "center" ]
+                                    [ Html.a
+                                        [ Attr.class "email-button"
+                                        , Attr.rel "noopener noreferrer"
+                                        , Attr.style "background-color" "#2c2c2c"
+                                        , Attr.style "color" "#ffffff"
+                                        , Attr.style "border-radius" "4px"
+                                        , Attr.style "font-family" "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif"
+                                        , Attr.style "border-color" "#2c2c2c"
+                                        , Attr.style "box-sizing" "border-box"
+                                        , Attr.style "border-style" "solid"
+                                        , Attr.style "display" "inline-block"
+                                        , Attr.style "text-align" "center"
+                                        , Attr.style "text-decoration" "none"
+                                        , Attr.style "padding" "12px 20px"
+                                        , Attr.style "margin-top" "8px"
+                                        , Attr.style "margin-bottom" "8px"
+                                        , Attr.style "font-size" "16px"
+                                        , Attr.href href
+                                        ]
+                                        children
+                                    ]
+                                ]
+                            ]
+                        ]
+                )
+                |> Markdown.Html.withAttribute "href"
             ]
     , codeBlock =
         \{ body } ->
@@ -164,7 +249,7 @@ renderer =
                     [ Html.text body
                     ]
                 ]
-    , thematicBreak = Html.hr [] []
+    , thematicBreak = Html.hr [ Attr.style "margin-top" "48px", Attr.style "margin-bottom" "48px" ] []
     , table = Html.table []
     , tableHeader = Html.thead []
     , tableBody = Html.tbody []
