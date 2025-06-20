@@ -134,6 +134,20 @@ renderer =
             [ Markdown.Html.tag "youtube-embed"
                 (\src _ -> YoutubeEmbed.webEmbed src)
                 |> Markdown.Html.withAttribute "src"
+            , Markdown.Html.tag "email-button"
+                (\href text _ ->
+                    Html.div [ Attr.class "my-4 text-center" ]
+                        [ Html.a
+                            [ Attr.href href
+                            , Attr.class "inline-block bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-md text-center text-decoration-none transition-colors"
+                            , Attr.target "_blank"
+                            , Attr.rel "noopener noreferrer"
+                            ]
+                            [ Html.text text ]
+                        ]
+                )
+                |> Markdown.Html.withAttribute "href"
+                |> Markdown.Html.withAttribute "text"
             ]
     , codeBlock =
         \{ body, language } ->
