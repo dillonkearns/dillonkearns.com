@@ -8,7 +8,7 @@ We're heading back to one of my favorite venues!
 **Fox Wine Co.** in the Funk Zone  
 **Sunday, July 19** 4:30-6:30pm
 
-To me, the Fox Wine/Topa Topa patio area embodies the classic Funk Zone vibe. It's an awesome spot to grab a drink and enjoy some live music. I'd love to see you there!
+To me, the Fox Wine/Topa Topa patio area embodies the classic Funk Zone vibe. So peaceful and green, yet with the iconic industrial aestehtics. It's an awesome spot to grab a drink and enjoy some live music. I'd love to see you there!
 
 ## What is Soir Noir?
 
