@@ -125,8 +125,9 @@ view app shared =
     { title = app.data.newsletter.metadata.title ++ " - Preview"
     , body =
         [ Html.div
-            [ Attr.style "max-width" "600px"
-            , Attr.style "margin" "0 auto"
+            [
+            Attr.style "max-width" "800px",
+             Attr.style "margin" "0 auto"
             , Attr.style "padding" "20px"
             , Attr.style "font-family" "system-ui, -apple-system, sans-serif"
             ]
@@ -165,7 +166,230 @@ view app shared =
                 , Attr.style "overflow" "hidden"
                 , Attr.class "tailwind-reset"
                 ]
-                [ htmlContent ]
+                [ -- Email container wrapper to fix width issues
+                  Html.div [ Attr.style "background-color" "#ffffff" ]
+                    [ Html.table 
+                        [ Attr.attribute "role" "presentation"
+                        , Attr.attribute "cellpadding" "0"
+                        , Attr.attribute "cellspacing" "0"
+                        , Attr.style "background" "#f3f3f3!important"
+                        , Attr.style "width" "100%"
+                        , Attr.attribute "bgcolor" "#ffffff"
+                        ]
+                        [ Html.tbody []
+                            [ Html.tr []
+                                [ Html.td []
+                                    [ Html.div
+                                        [ Attr.style "padding-top" "0"
+                                        , Attr.style "padding-left" "0"
+                                        , Attr.style "padding-bottom" "30px"
+                                        , Attr.style "padding-right" "0"
+                                        , Attr.style "margin" "0 auto"
+                                        , Attr.style "max-width" "100%"
+                                        ]
+                                        [ Html.table
+                                            [ Attr.attribute "cellpadding" "0"
+                                            , Attr.attribute "cellspacing" "0"
+                                            , Attr.attribute "bgcolor" "#f3f3f3"
+                                            , Attr.style "width" "100%"
+                                            , Attr.style "margin" "0 auto"
+                                            , Attr.style "background-color" "#f3f3f3"
+                                            ]
+                                            [ Html.tbody []
+                                                [ Html.tr []
+                                                    [ Html.td []
+                                                        [ -- Banner image section
+                                                          Html.div [ Attr.style "margin" "0px auto 0px auto" ]
+                    [ Html.node "center" []
+                        [ Html.table 
+                            [ Attr.attribute "cellpadding" "0"
+                            , Attr.attribute "cellspacing" "0"
+                            , Attr.style "width" "100%"
+                            , Attr.style "margin" "0 auto"
+                            , Attr.style "max-width" "100%"
+                            ]
+                            [ Html.tbody []
+                                [ Html.tr []
+                                    [ Html.td [] []
+                                    , Html.td 
+                                        [ Attr.style "width" "100%"
+                                        , Attr.style "background-size" "cover"
+                                        , Attr.style "background-position" "center"
+                                        , Attr.style "background-image" "url(https://embed.filekitcdn.com/e/eShkVyGHvHPbXXSEF493tU/5dbueALvXuJ4v1u3zDQ2qm)"
+                                        , Attr.style "border-radius" "0px"
+                                        , Attr.style "box-sizing" "border-box"
+                                        , Attr.attribute "background" "https://embed.filekitcdn.com/e/eShkVyGHvHPbXXSEF493tU/5dbueALvXuJ4v1u3zDQ2qm"
+                                        ]
+                                        [ Html.div 
+                                            [ Attr.style "padding" "98px 0px 98px 0px" ]
+                                            [ Html.div 
+                                                [ Attr.style "margin-left" "auto"
+                                                , Attr.style "margin-right" "auto"
+                                                , Attr.style "max-width" "640px"
+                                                ]
+                                                [ Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "22px"
+                                                    , Attr.style "color" "#fcfcfc"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "​" ]
+                                                ]
+                                            ]
+                                        ]
+                                    , Html.td [] []
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                -- Greeting section
+                , Html.div [ Attr.style "margin" "0px auto 0px auto" ]
+                    [ Html.node "center" []
+                        [ Html.table 
+                            [ Attr.attribute "cellpadding" "0"
+                            , Attr.attribute "cellspacing" "0"
+                            , Attr.style "width" "100%"
+                            , Attr.style "margin" "0 auto"
+                            , Attr.style "max-width" "100%"
+                            ]
+                            [ Html.tbody []
+                                [ Html.tr []
+                                    [ Html.td [] []
+                                    , Html.td 
+                                        [ Attr.style "width" "100%"
+                                        , Attr.style "background-color" "#ffffff"
+                                        , Attr.style "border-radius" "0px"
+                                        , Attr.style "box-sizing" "border-box"
+                                        , Attr.attribute "bgcolor" "#FFFFFF"
+                                        ]
+                                        [ Html.div 
+                                            [ Attr.style "padding" "15px 0px 0px 0px" ]
+                                            [ Html.div 
+                                                [ Attr.style "margin-left" "auto"
+                                                , Attr.style "margin-right" "auto"
+                                                , Attr.style "max-width" "640px"
+                                                ]
+                                                [ Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "18px"
+                                                    , Attr.style "color" "#353535"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "Hey Dillon," ]
+                                                , Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "18px"
+                                                    , Attr.style "color" "#353535"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "​" ]
+                                                , Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "18px"
+                                                    , Attr.style "color" "#353535"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "​" ]
+                                                ]
+                                            ]
+                                        ]
+                                    , Html.td [] []
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                -- Main content (actual newsletter content)
+                , htmlContent
+                -- Footer section
+                , Html.div [ Attr.style "margin" "0px auto 0px auto" ]
+                    [ Html.node "center" []
+                        [ Html.table 
+                            [ Attr.attribute "cellpadding" "0"
+                            , Attr.attribute "cellspacing" "0"
+                            , Attr.style "width" "100%"
+                            , Attr.style "margin" "0 auto"
+                            , Attr.style "max-width" "100%"
+                            ]
+                            [ Html.tbody []
+                                [ Html.tr []
+                                    [ Html.td [] []
+                                    , Html.td 
+                                        [ Attr.style "width" "100%"
+                                        , Attr.style "background-color" "#000000"
+                                        , Attr.style "border-radius" "0px"
+                                        , Attr.style "box-sizing" "border-box"
+                                        , Attr.attribute "bgcolor" "#000000"
+                                        ]
+                                        [ Html.div 
+                                            [ Attr.style "padding" "36px 0px 24px 0px" ]
+                                            [ Html.div 
+                                                [ Attr.style "margin-left" "auto"
+                                                , Attr.style "margin-right" "auto"
+                                                , Attr.style "max-width" "640px"
+                                                ]
+                                                [ Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "18px"
+                                                    , Attr.style "color" "#ffffff"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "Copyright © 2025 Dillon Kearns, All rights reserved" ]
+                                                , Html.p 
+                                                    [ Attr.style "font-family" "-apple-system,BlinkMacSystemFont,sans-serif"
+                                                    , Attr.style "font-size" "18px"
+                                                    , Attr.style "color" "#ffffff"
+                                                    , Attr.style "font-weight" "400"
+                                                    , Attr.style "line-height" "1.5"
+                                                    ]
+                                                    [ Html.text "113 Cherry St #92768, Seattle, WA 98104-2205"
+                                                    , Html.br [] []
+                                                    , Html.text "​"
+                                                    , Html.a 
+                                                        [ Attr.href "#"
+                                                        , Attr.class "ck-link"
+                                                        , Attr.rel "noopener noreferrer"
+                                                        , Attr.style "color" "#ffffff"
+                                                        , Attr.target "_blank"
+                                                        ]
+                                                        [ Html.text "Unsubscribe" ]
+                                                    , Html.text " · "
+                                                    , Html.a 
+                                                        [ Attr.href "#"
+                                                        , Attr.class "ck-link"
+                                                        , Attr.rel "noopener noreferrer"
+                                                        , Attr.style "color" "#ffffff"
+                                                        , Attr.target "_blank"
+                                                        ]
+                                                        [ Html.text "Preferences" ]
+                                                    , Html.text "​"
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    , Html.td [] []
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             , Html.div
                 [ Attr.style "margin-top" "20px"
                 , Attr.style "padding" "15px"
