@@ -209,9 +209,9 @@ renderer =
             [ Markdown.Html.tag "youtube-embed"
                 (\src _ -> YoutubeEmbed.emailEmbed src)
                 |> Markdown.Html.withAttribute "src"
-            , Markdown.Html.tag "button"
-                (\href children ->
-                    Html.table [ Attr.width 100, Attr.style "width" "100%" ]
+            , Markdown.Html.tag "email-button"
+                (\href text _ ->
+                    Html.table [ Attr.attribute "width" "100%" ]
                         [ Html.tbody []
                             [ Html.tr []
                                 [ Html.td [ Attr.align "center" ]
@@ -220,11 +220,13 @@ renderer =
                                         , Attr.rel "noopener noreferrer"
                                         , Attr.style "background-color" "#2c2c2c"
                                         , Attr.style "color" "#ffffff"
-                                        , Attr.style "border-radius" "4px"
+                                        , Attr.style "border-radius" "0px"
                                         , Attr.style "font-family" "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif"
                                         , Attr.style "border-color" "#2c2c2c"
+                                        , Attr.style "background-color" "#2c2c2c"
                                         , Attr.style "box-sizing" "border-box"
                                         , Attr.style "border-style" "solid"
+                                        , Attr.style "color" "#ffffff"
                                         , Attr.style "display" "inline-block"
                                         , Attr.style "text-align" "center"
                                         , Attr.style "text-decoration" "none"
@@ -232,15 +234,17 @@ renderer =
                                         , Attr.style "margin-top" "8px"
                                         , Attr.style "margin-bottom" "8px"
                                         , Attr.style "font-size" "16px"
+                                        , Attr.style "border-radius" "4px 4px 4px 4px"
                                         , Attr.href href
                                         ]
-                                        children
+                                        [ Html.text text ]
                                     ]
                                 ]
                             ]
                         ]
                 )
                 |> Markdown.Html.withAttribute "href"
+                |> Markdown.Html.withAttribute "text"
             ]
     , codeBlock =
         \{ body } ->
