@@ -22,12 +22,13 @@ Here's a taste of our sound from our last show at Fox Wine (and you can get a se
 
 We've been doing a deep dive on Brazilian jazz lately, prepping an all-Bossa Nova and Samba program for an upcoming private event as a quartet. I absolutely love Bossa - it has such a laid back yet melancholy quality at the same time. We're working on some of my favorite Jobim classics including
 
+
 - One Note Samba
 - Wave
 - Corcovado
 
-Many more of course, but those are a few of my favorites.
 
+And many more of course, but those are a few of my favorites.
 
 We're planning to weave some of these Brazilian influences into our upcoming Fox Wine show, too.
 
