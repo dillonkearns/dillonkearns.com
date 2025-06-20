@@ -2,7 +2,7 @@
 title: "Introducing Soir Noir (and why we chose that name)"
 ---
 
-We're heading back to one of my favorite venues!
+We're heading back to one of my favorite Funk Zone venues!
 
 **Soir Noir** (Brandon Kinalele on guitar/vocals and myself on piano)  
 **Fox Wine Co.** in the Funk Zone  
@@ -20,7 +20,16 @@ Here's a taste of our sound from our last show at Fox Wine (and you can get a se
 
 ## What We're Working On
 
-We've been doing a deep dive on Brazilian jazz lately, prepping an all-Bossa Nova and Samba program for an upcoming private event with the incredible Matt Perko on drums and the legendary Kim Collins on bass. I absolutely love Bossa - it has such a laid back yet melancholy quality at the same time. We're working on some of my favorite Jobim classics including One Note Samba, Wave, and Corcovado. We're planning to weave some of these Brazilian influences into our upcoming Fox Wine show, too.
+We've been doing a deep dive on Brazilian jazz lately, prepping an all-Bossa Nova and Samba program for an upcoming private event as a quartet. I absolutely love Bossa - it has such a laid back yet melancholy quality at the same time. We're working on some of my favorite Jobim classics including
+
+- One Note Samba
+- Wave
+- Corcovado
+
+Many more of course, but those are a few of my favorites.
+
+
+We're planning to weave some of these Brazilian influences into our upcoming Fox Wine show, too.
 
 Hope to see you soon!
 
