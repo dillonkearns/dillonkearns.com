@@ -61,9 +61,10 @@ parseFilename filename =
             case ( String.toInt year, String.toInt month, String.toInt day ) of
                 ( Just y, Just m, Just d ) ->
                     let
-                        date = Date.fromCalendarDate y (intToMonth m) d
+                        date =
+                            Date.fromCalendarDate y (intToMonth m) d
                     in
-                    Just 
+                    Just
                         { date = date
                         , slug = String.join "-" rest
                         }
@@ -78,18 +79,41 @@ parseFilename filename =
 intToMonth : Int -> Time.Month
 intToMonth month =
     case month of
-        1 -> Time.Jan
-        2 -> Time.Feb
-        3 -> Time.Mar
-        4 -> Time.Apr
-        5 -> Time.May
-        6 -> Time.Jun
-        7 -> Time.Jul
-        8 -> Time.Aug
-        9 -> Time.Sep
-        10 -> Time.Oct
-        11 -> Time.Nov
-        _ -> Time.Dec
+        1 ->
+            Time.Jan
+
+        2 ->
+            Time.Feb
+
+        3 ->
+            Time.Mar
+
+        4 ->
+            Time.Apr
+
+        5 ->
+            Time.May
+
+        6 ->
+            Time.Jun
+
+        7 ->
+            Time.Jul
+
+        8 ->
+            Time.Aug
+
+        9 ->
+            Time.Sep
+
+        10 ->
+            Time.Oct
+
+        11 ->
+            Time.Nov
+
+        _ ->
+            Time.Dec
 
 
 decoder : Decoder NewsletterMetadata

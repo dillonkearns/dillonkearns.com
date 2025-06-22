@@ -51,10 +51,10 @@ renderer =
                         content
 
                 Nothing ->
-                    Html.a 
+                    Html.a
                         [ Attr.href link.destination
                         , Attr.class "text-blue-600 hover:text-blue-800 underline"
-                        ] 
+                        ]
                         content
     , image =
         \imageInfo ->
@@ -157,16 +157,16 @@ renderer =
                     ]
                 ]
     , thematicBreak = Html.hr [ Attr.class "my-8 border-gray-300" ] []
-    , table = Html.table [ Attr.class "min-w-full divide-y divide-gray-200 mb-4" ] 
+    , table = Html.table [ Attr.class "min-w-full divide-y divide-gray-200 mb-4" ]
     , tableHeader = Html.thead [ Attr.class "bg-gray-50" ]
     , tableBody = Html.tbody [ Attr.class "bg-white divide-y divide-gray-200" ]
     , tableRow = Html.tr []
     , tableHeaderCell =
         \maybeAlignment ->
-            Html.th 
+            Html.th
                 [ Attr.class "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" ]
     , tableCell =
         \maybeAlignment ->
-            Html.td 
+            Html.td
                 [ Attr.class "px-6 py-4 whitespace-nowrap text-sm text-gray-900" ]
     }

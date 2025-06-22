@@ -1,4 +1,4 @@
-module YoutubeEmbed exposing (extractVideoId, webEmbed, emailEmbed)
+module YoutubeEmbed exposing (emailEmbed, extractVideoId, webEmbed)
 
 import Html exposing (Html)
 import Html.Attributes as Attr
@@ -24,7 +24,8 @@ extractVideoId src =
 webEmbed : String -> Html msg
 webEmbed src =
     let
-        videoId = extractVideoId src
+        videoId =
+            extractVideoId src
     in
     Html.div
         [ Attr.class "w-full aspect-video bg-gray-200 shadow-lg rounded-xl overflow-hidden my-6" ]

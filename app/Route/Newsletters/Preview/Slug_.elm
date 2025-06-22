@@ -125,9 +125,8 @@ view app shared =
     { title = app.data.newsletter.metadata.title ++ " - Preview"
     , body =
         [ Html.div
-            [
-            Attr.style "max-width" "800px",
-             Attr.style "margin" "0 auto"
+            [ Attr.style "max-width" "800px"
+            , Attr.style "margin" "0 auto"
             , Attr.style "padding" "20px"
             , Attr.style "font-family" "system-ui, -apple-system, sans-serif"
             ]
@@ -139,22 +138,22 @@ view app shared =
                 , Attr.style "margin-bottom" "20px"
                 , Attr.style "font-size" "14px"
                 ]
-                [ Html.p [ Attr.style "margin" "0 0 10px 0" ] 
+                [ Html.p [ Attr.style "margin" "0 0 10px 0" ]
                     [ Html.strong [] [ Html.text "Title: " ]
-                    , Html.text app.data.newsletter.metadata.title 
+                    , Html.text app.data.newsletter.metadata.title
                     ]
-                , Html.p [ Attr.style "margin" "0 0 10px 0" ] 
+                , Html.p [ Attr.style "margin" "0 0 10px 0" ]
                     [ Html.strong [] [ Html.text "Publish Date: " ]
-                    , Html.text (Date.toIsoString app.data.newsletter.publishAt) 
+                    , Html.text (Date.toIsoString app.data.newsletter.publishAt)
                     ]
-                , Html.p [ Attr.style "margin" "0" ] 
+                , Html.p [ Attr.style "margin" "0" ]
                     [ Html.strong [] [ Html.text "RSS Feed: " ]
-                    , Html.a 
+                    , Html.a
                         [ Attr.href "/newsletters/feed.xml"
                         , Attr.target "_blank"
                         , Attr.style "color" "#0066cc"
-                        ] 
-                        [ Html.text "/newsletters/feed.xml" ] 
+                        ]
+                        [ Html.text "/newsletters/feed.xml" ]
                     ]
                 ]
             , Html.div
@@ -398,7 +397,7 @@ view app shared =
                 , Attr.style "font-size" "14px"
                 , Attr.style "color" "#0066cc"
                 ]
-                [ Html.p [ Attr.style "margin" "0" ] 
+                [ Html.p [ Attr.style "margin" "0" ]
                     [ Html.strong [] [ Html.text "Preview Note: " ]
                     , Html.text "This shows how your newsletter will appear in Kit.com emails. YouTube embeds are displayed as clickable thumbnail images that link to the video."
                     ]

@@ -4,7 +4,6 @@ import BackendTask exposing (BackendTask)
 import BackendTask.File
 import Date
 import FatalError exposing (FatalError)
-import Time
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -20,6 +19,7 @@ import Route
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Signup
+import Time
 import View exposing (View)
 
 
@@ -118,8 +118,8 @@ view app shared =
                     rendered
 
                 Err error ->
-                    [ Html.p [ Attr.class "text-red-600" ] 
-                        [ Html.text ("Error rendering markdown: " ++ error) ] 
+                    [ Html.p [ Attr.class "text-red-600" ]
+                        [ Html.text ("Error rendering markdown: " ++ error) ]
                     ]
     in
     { title = app.data.newsletter.metadata.title
@@ -129,12 +129,12 @@ view app shared =
             , Html.main_ [ Attr.class "max-w-4xl mx-auto px-4 py-8" ]
                 [ Html.article [ Attr.class "bg-white rounded-lg shadow-sm p-8" ]
                     [ Html.header [ Attr.class "mb-8 border-b pb-6" ]
-                        [ Html.h1 [ Attr.class "text-3xl font-bold text-gray-900 mb-2" ] 
+                        [ Html.h1 [ Attr.class "text-3xl font-bold text-gray-900 mb-2" ]
                             [ Html.text app.data.newsletter.metadata.title ]
-                        , Html.time 
+                        , Html.time
                             [ Attr.class "text-gray-600"
-                            , Attr.datetime (Date.toIsoString app.data.newsletter.publishAt) 
-                            ] 
+                            , Attr.datetime (Date.toIsoString app.data.newsletter.publishAt)
+                            ]
                             [ Html.text (formatDate app.data.newsletter.publishAt) ]
                         ]
                     , Html.div [ Attr.class "prose prose-lg max-w-none" ]
@@ -154,18 +154,41 @@ formatDate date =
     let
         monthName =
             case Date.month date of
-                Time.Jan -> "January"
-                Time.Feb -> "February"
-                Time.Mar -> "March"
-                Time.Apr -> "April"
-                Time.May -> "May"
-                Time.Jun -> "June"
-                Time.Jul -> "July"
-                Time.Aug -> "August"
-                Time.Sep -> "September"
-                Time.Oct -> "October"
-                Time.Nov -> "November"
-                Time.Dec -> "December"
+                Time.Jan ->
+                    "January"
+
+                Time.Feb ->
+                    "February"
+
+                Time.Mar ->
+                    "March"
+
+                Time.Apr ->
+                    "April"
+
+                Time.May ->
+                    "May"
+
+                Time.Jun ->
+                    "June"
+
+                Time.Jul ->
+                    "July"
+
+                Time.Aug ->
+                    "August"
+
+                Time.Sep ->
+                    "September"
+
+                Time.Oct ->
+                    "October"
+
+                Time.Nov ->
+                    "November"
+
+                Time.Dec ->
+                    "December"
     in
     monthName ++ " " ++ String.fromInt (Date.day date) ++ ", " ++ String.fromInt (Date.year date)
 

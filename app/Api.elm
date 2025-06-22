@@ -7,9 +7,9 @@ import Date
 import FatalError exposing (FatalError)
 import Html exposing (Html)
 import Html.String
+import Markdown.Renderer
 import MarkdownCodec
 import MarkdownHtmlRenderer
-import Markdown.Renderer
 import Newsletter
 import Pages
 import Pages.Manifest as Manifest
