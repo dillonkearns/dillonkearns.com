@@ -176,9 +176,9 @@ view app shared model =
 
             Nothing ->
                 [ Html.div
-                    [ Attr.class "bg-gray-900 py-12 px-4 text-center text-white" ]
+                    [ Attr.class "bg-white min-h-screen py-12 px-4 text-center" ]
                     [ Html.h1
-                        [ Attr.class "text-3xl font-bold" ]
+                        [ Attr.class "text-3xl font-bold text-gray-900" ]
                         [ Html.text "No event scheduled for today" ]
                     ]
                 , Signup.view { firstName = Nothing, email = Nothing }
@@ -190,6 +190,7 @@ type alias Musician =
     { name : String
     , instrument : String
     , socialLinks : List SocialLink
+    , headshot : Maybe String
     }
 
 
@@ -216,36 +217,52 @@ type SocialPlatform
 viewLineup : Time.Zone -> Event.Event -> Maybe Band -> List Musician -> Html msg
 viewLineup zone event maybeBand musicians =
     Html.div
-        [ Attr.class "bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
+        [ Attr.class "bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8"
         ]
         [ Html.div
-            [ Attr.class "max-w-3xl mx-auto"
+            [ Attr.class "max-w-4xl mx-auto"
             ]
             [ Html.h1
-                [ Attr.class "text-4xl font-bold text-center text-white mb-4"
+                [ Attr.class "text-5xl font-bold text-center text-gray-900 mb-8"
                 ]
                 [ Html.text "Today's Lineup" ]
             , Html.p
-                [ Attr.class "text-center text-gray-300 mb-4 text-lg"
+                [ Attr.class "text-center text-gray-600 mb-2 text-xl font-medium"
                 ]
                 [ Html.text event.name ]
             , Html.p
-                [ Attr.class "text-center text-gray-300 mb-12"
+                [ Attr.class "text-center text-gray-500 mb-16 text-lg"
                 ]
                 [ Html.text (formatEventTime zone event.dateTimeStart ++ " • " ++ event.location.name) ]
-            , Html.div
-                [ Attr.class "space-y-6 mt-12"
-                ]
-                (List.concat
-                    [ case maybeBand of
-                        Just band ->
-                            [ viewBand band ]
+            , case maybeBand of
+                Just band ->
+                    Html.div []
+                        [ Html.h2
+                            [ Attr.class "text-3xl font-bold text-gray-900 mb-8"
+                            ]
+                            [ Html.text "Featured Band" ]
+                        , viewBand band
+                        , Html.h2
+                            [ Attr.class "text-3xl font-bold text-gray-900 mt-16 mb-8"
+                            ]
+                            [ Html.text "Musicians Playing the Gig" ]
+                        , Html.div
+                            [ Attr.class "space-y-8"
+                            ]
+                            (List.map viewMusician musicians)
+                        ]
 
-                        Nothing ->
-                            []
-                    , List.map viewMusician musicians
-                    ]
-                )
+                Nothing ->
+                    Html.div []
+                        [ Html.h2
+                            [ Attr.class "text-3xl font-bold text-gray-900 mb-8"
+                            ]
+                            [ Html.text "Musicians Playing the Gig" ]
+                        , Html.div
+                            [ Attr.class "space-y-8"
+                            ]
+                            (List.map viewMusician musicians)
+                        ]
             ]
         ]
 
@@ -272,24 +289,32 @@ formatEventTime zone time =
 viewBand : Band -> Html msg
 viewBand band =
     Html.div
-        [ Attr.class "bg-gray-800 rounded-lg p-6 shadow-lg"
+        [ Attr.class "bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-200"
         ]
         [ Html.div
-            [ Attr.class "flex justify-between items-start mb-4"
+            [ Attr.class "flex items-center gap-6 mb-6"
             ]
-            [ Html.div []
-                [ Html.h2
-                    [ Attr.class "text-2xl font-semibold text-white"
+            [ Html.div
+                [ Attr.class "w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0"
+                ]
+                [ Html.span
+                    [ Attr.class "text-gray-600 text-2xl font-bold"
+                    ]
+                    [ Html.text (String.left 1 band.name) ]
+                ]
+            , Html.div []
+                [ Html.h3
+                    [ Attr.class "text-3xl font-bold text-gray-900 mb-1"
                     ]
                     [ Html.text band.name ]
                 , Html.p
-                    [ Attr.class "text-gray-400"
+                    [ Attr.class "text-gray-600 text-lg"
                     ]
                     [ Html.text "Band" ]
                 ]
             ]
         , Html.div
-            [ Attr.class "flex gap-x-4"
+            [ Attr.class "flex gap-x-3"
             ]
             (List.map (viewSocialLink band.name) band.socialLinks)
         ]
@@ -298,26 +323,44 @@ viewBand band =
 viewMusician : Musician -> Html msg
 viewMusician musician =
     Html.div
-        [ Attr.class "bg-gray-800 rounded-lg p-6 shadow-lg"
+        [ Attr.class "bg-white border-b border-gray-200 last:border-b-0 pb-8 last:pb-0"
         ]
         [ Html.div
-            [ Attr.class "flex justify-between items-start mb-4"
+            [ Attr.class "flex items-center gap-6 mb-4"
             ]
-            [ Html.div []
-                [ Html.h2
-                    [ Attr.class "text-2xl font-semibold text-white"
+            [ case musician.headshot of
+                Just headshotUrl ->
+                    Html.img
+                        [ Attr.src headshotUrl
+                        , Attr.alt (musician.name ++ " headshot")
+                        , Attr.class "w-24 h-24 rounded-full object-cover flex-shrink-0"
+                        ]
+                        []
+
+                Nothing ->
+                    Html.div
+                        [ Attr.class "w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0"
+                        ]
+                        [ Html.span
+                            [ Attr.class "text-gray-600 text-2xl font-bold"
+                            ]
+                            [ Html.text (String.left 1 musician.name) ]
+                        ]
+            , Html.div [ Attr.class "flex-1" ]
+                [ Html.h3
+                    [ Attr.class "text-2xl font-bold text-gray-900 mb-1"
                     ]
                     [ Html.text musician.name ]
                 , Html.p
-                    [ Attr.class "text-gray-400"
+                    [ Attr.class "text-gray-600 text-lg mb-3"
                     ]
                     [ Html.text musician.instrument ]
+                , Html.div
+                    [ Attr.class "flex gap-x-3"
+                    ]
+                    (List.map (viewSocialLink musician.name) musician.socialLinks)
                 ]
             ]
-        , Html.div
-            [ Attr.class "flex gap-x-4"
-            ]
-            (List.map (viewSocialLink musician.name) musician.socialLinks)
         ]
 
 
@@ -327,7 +370,7 @@ viewSocialLink musicianName link =
         [ Attr.href link.url
         , Attr.target "_blank"
         , Attr.rel "noopener noreferrer"
-        , Attr.class "text-indigo-400 hover:text-indigo-300"
+        , Attr.class "w-10 h-10 rounded-lg bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white transition-colors"
         ]
         [ Html.span
             [ Attr.class "sr-only"
@@ -361,7 +404,7 @@ socialIcon platform =
     case platform of
         Instagram ->
             Svg.svg
-                [ SvgAttr.class "size-6"
+                [ SvgAttr.class "w-5 h-5"
                 , SvgAttr.fill "currentColor"
                 , SvgAttr.viewBox "0 0 24 24"
                 , Attr.attribute "aria-hidden" "true"
@@ -379,7 +422,7 @@ socialIcon platform =
 
         Spotify ->
             Svg.svg
-                [ SvgAttr.class "size-6"
+                [ SvgAttr.class "w-5 h-5"
                 , SvgAttr.fill "currentColor"
                 , SvgAttr.viewBox "0 0 24 24"
                 , Attr.attribute "aria-hidden" "true"
@@ -392,7 +435,7 @@ socialIcon platform =
 
         YouTube ->
             Svg.svg
-                [ SvgAttr.class "size-6"
+                [ SvgAttr.class "w-5 h-5"
                 , SvgAttr.fill "currentColor"
                 , SvgAttr.viewBox "0 0 24 24"
                 , Attr.attribute "aria-hidden" "true"
@@ -407,7 +450,7 @@ socialIcon platform =
 
         Facebook ->
             Svg.svg
-                [ SvgAttr.class "size-6"
+                [ SvgAttr.class "w-5 h-5"
                 , SvgAttr.fill "currentColor"
                 , SvgAttr.viewBox "0 0 24 24"
                 , Attr.attribute "aria-hidden" "true"
@@ -424,7 +467,7 @@ socialIcon platform =
 websiteIcon : Html msg
 websiteIcon =
     Svg.svg
-        [ SvgAttr.class "size-6"
+        [ SvgAttr.class "w-5 h-5"
         , SvgAttr.fill "none"
         , SvgAttr.viewBox "0 0 24 24"
         , SvgAttr.strokeWidth "1.5"
@@ -512,10 +555,21 @@ musiciansDecoder =
 
 musicianDecoder : Decoder Musician
 musicianDecoder =
-    Decode.map3 Musician
+    Decode.map4 Musician
         (Decode.field "Name" Decode.string)
         (Decode.field "Instrument" Decode.string)
         socialLinksDecoder
+        headshotDecoder
+
+
+headshotDecoder : Decoder (Maybe String)
+headshotDecoder =
+    Decode.maybe 
+        (Decode.field "Headshot" 
+            (Decode.index 0 
+                (Decode.field "url" Decode.string)
+            )
+        )
 
 
 socialLinksDecoder : Decoder (List SocialLink)
