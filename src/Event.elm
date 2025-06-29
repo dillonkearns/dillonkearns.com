@@ -16,6 +16,8 @@ type alias Event =
     , dateTimeStart : Time.Posix
     , dateTimeEnd : Time.Posix
     , location : Venue
+    , bandId : Maybe String -- ID of the linked band record
+    , musicianIds : List String -- IDs of the linked musician records
     , ticketUrl : Maybe String -- link to the ticket page if available
     }
 
@@ -72,11 +74,13 @@ eventsDecoder =
 
 recordDecoder : Decoder Event
 recordDecoder =
-    Decode.map5 Event
+    Decode.map7 Event
         (Decode.field "Event Title" Decode.string)
         (Decode.field "Start Date/Time" Iso8601.decoder)
         endTimeDecoder
         venueDecoder
+        bandIdDecoder
+        musicianIdsDecoder
         (Decode.succeed Nothing {- TODO -})
 
 
@@ -97,6 +101,18 @@ venueDecoder =
         (Decode.field "Venue Name" (Decode.index 0 Decode.string))
         (Decode.field "Google Maps Location" (Decode.index 0 Decode.string))
         (Decode.succeed Nothing {- TODO -})
+
+
+bandIdDecoder : Decoder (Maybe String)
+bandIdDecoder =
+    Decode.maybe (Decode.field "Band" (Decode.index 0 Decode.string))
+
+
+musicianIdsDecoder : Decoder (List String)
+musicianIdsDecoder =
+    Decode.field "Musicians" (Decode.list Decode.string)
+        |> Decode.maybe
+        |> Decode.map (Maybe.withDefault [])
 
 
 getEvents : BackendTask FatalError (List Event)

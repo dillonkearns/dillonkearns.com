@@ -9,7 +9,9 @@ module Route.Today exposing (Model, Msg, RouteParams, route, Data, ActionData)
 import BackendTask
 import BackendTask.Env
 import BackendTask.Http
+import DateFormat
 import Effect
+import Event
 import FatalError
 import Head
 import Head.Seo as Seo
@@ -24,16 +26,18 @@ import Shared
 import Signup
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
+import Task
+import Time
 import UrlPath
 import View
 
 
 type alias Model =
-    {}
+    { zone : Time.Zone }
 
 
 type Msg
-    = NoOp
+    = GotTimezone Time.Zone
 
 
 type alias RouteParams =
@@ -57,7 +61,9 @@ init :
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
 init app shared =
-    ( {}, Effect.none )
+    ( { zone = Time.utc }
+    , Effect.fromCmd (Time.here |> Task.perform GotTimezone)
+    )
 
 
 update :
@@ -68,8 +74,8 @@ update :
     -> ( Model, Effect.Effect Msg )
 update app shared msg model =
     case msg of
-        NoOp ->
-            ( model, Effect.none )
+        GotTimezone zone ->
+            ( { model | zone = zone }, Effect.none )
 
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
@@ -78,7 +84,10 @@ subscriptions routeParams path shared model =
 
 
 type alias Data =
-    { musicians : List Musician }
+    { todayEvent : Maybe Event.Event
+    , band : Maybe Band
+    , musicians : List Musician
+    }
 
 
 type alias ActionData =
@@ -87,8 +96,50 @@ type alias ActionData =
 
 data : BackendTask.BackendTask FatalError.FatalError Data
 data =
-    getMusicians
-        |> BackendTask.map (\musicians -> { musicians = musicians })
+    Event.getEvents
+        |> BackendTask.andThen
+            (\events ->
+                let
+                    todayEvent =
+                        findTodayEvent events
+                in
+                case todayEvent of
+                    Just event ->
+                        let
+                            bandTask =
+                                case event.bandId of
+                                    Just bandId ->
+                                        getBand bandId
+                                            |> BackendTask.map Just
+
+                                    Nothing ->
+                                        BackendTask.succeed Nothing
+
+                            musiciansTask =
+                                case event.musicianIds of
+                                    [] ->
+                                        BackendTask.succeed []
+
+                                    ids ->
+                                        getMusicians ids
+                        in
+                        BackendTask.map2
+                            (\band musicians ->
+                                { todayEvent = todayEvent
+                                , band = band
+                                , musicians = musicians
+                                }
+                            )
+                            bandTask
+                            musiciansTask
+
+                    Nothing ->
+                        BackendTask.succeed
+                            { todayEvent = Nothing
+                            , band = Nothing
+                            , musicians = []
+                            }
+            )
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -117,15 +168,33 @@ view :
 view app shared model =
     { title = "Today's Lineup"
     , body =
-        [ viewLineup app.data.musicians
-        , Signup.view { firstName = Nothing, email = Nothing }
-        ]
+        case app.data.todayEvent of
+            Just event ->
+                [ viewLineup model.zone event app.data.band app.data.musicians
+                , Signup.view { firstName = Nothing, email = Nothing }
+                ]
+
+            Nothing ->
+                [ Html.div
+                    [ Attr.class "bg-gray-900 py-12 px-4 text-center text-white" ]
+                    [ Html.h1
+                        [ Attr.class "text-3xl font-bold" ]
+                        [ Html.text "No event scheduled for today" ]
+                    ]
+                , Signup.view { firstName = Nothing, email = Nothing }
+                ]
     }
 
 
 type alias Musician =
     { name : String
     , instrument : String
+    , socialLinks : List SocialLink
+    }
+
+
+type alias Band =
+    { name : String
     , socialLinks : List SocialLink
     }
 
@@ -144,10 +213,8 @@ type SocialPlatform
     | Facebook
 
 
-
-
-viewLineup : List Musician -> Html msg
-viewLineup musicians =
+viewLineup : Time.Zone -> Event.Event -> Maybe Band -> List Musician -> Html msg
+viewLineup zone event maybeBand musicians =
     Html.div
         [ Attr.class "bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
         ]
@@ -159,14 +226,72 @@ viewLineup musicians =
                 ]
                 [ Html.text "Today's Lineup" ]
             , Html.p
-                [ Attr.class "text-center text-gray-300 mb-12 text-lg"
+                [ Attr.class "text-center text-gray-300 mb-4 text-lg"
                 ]
-                [ Html.text "January 28, 2025 • 8:00 PM" ]
+                [ Html.text event.name ]
+            , Html.p
+                [ Attr.class "text-center text-gray-300 mb-12"
+                ]
+                [ Html.text (formatEventTime zone event.dateTimeStart ++ " • " ++ event.location.name) ]
             , Html.div
                 [ Attr.class "space-y-6 mt-12"
                 ]
-                (List.map viewMusician musicians)
+                (List.concat
+                    [ case maybeBand of
+                        Just band ->
+                            [ viewBand band ]
+
+                        Nothing ->
+                            []
+                    , List.map viewMusician musicians
+                    ]
+                )
             ]
+        ]
+
+
+formatEventTime : Time.Zone -> Time.Posix -> String
+formatEventTime zone time =
+    DateFormat.format
+        [ DateFormat.dayOfWeekNameAbbreviated
+        , DateFormat.text ", "
+        , DateFormat.monthNameAbbreviated
+        , DateFormat.text " "
+        , DateFormat.dayOfMonthNumber
+        , DateFormat.text " at "
+        , DateFormat.hourFixed
+        , DateFormat.text ":"
+        , DateFormat.minuteFixed
+        , DateFormat.text " "
+        , DateFormat.amPmLowercase
+        ]
+        zone
+        time
+
+
+viewBand : Band -> Html msg
+viewBand band =
+    Html.div
+        [ Attr.class "bg-gray-800 rounded-lg p-6 shadow-lg"
+        ]
+        [ Html.div
+            [ Attr.class "flex justify-between items-start mb-4"
+            ]
+            [ Html.div []
+                [ Html.h2
+                    [ Attr.class "text-2xl font-semibold text-white"
+                    ]
+                    [ Html.text band.name ]
+                , Html.p
+                    [ Attr.class "text-gray-400"
+                    ]
+                    [ Html.text "Band" ]
+                ]
+            ]
+        , Html.div
+            [ Attr.class "flex gap-x-4"
+            ]
+            (List.map (viewSocialLink band.name) band.socialLinks)
         ]
 
 
@@ -315,23 +440,69 @@ websiteIcon =
         ]
 
 
-getMusicians : BackendTask.BackendTask FatalError.FatalError (List Musician)
-getMusicians =
+findTodayEvent : List Event.Event -> Maybe Event.Event
+findTodayEvent events =
+    List.head events
+
+
+getBand : String -> BackendTask.BackendTask FatalError.FatalError Band
+getBand bandId =
     BackendTask.Env.expect "AIRTABLE_JAZZ_TOKEN"
         |> BackendTask.allowFatal
         |> BackendTask.andThen
             (\airTableToken ->
                 BackendTask.Http.getWithOptions
-                    { url = "https://api.airtable.com/v0/appNxan3bXZ81sXQn/Musicians?view=Lineup"
+                    { url = "https://api.airtable.com/v0/appNxan3bXZ81sXQn/Bands/" ++ bandId
                     , timeoutInMs = Nothing
                     , retries = Nothing
                     , cachePath = Nothing
                     , cacheStrategy = Nothing
-                    , expect = BackendTask.Http.expectJson musiciansDecoder
+                    , expect = BackendTask.Http.expectJson bandDecoder
                     , headers = [ ( "Authorization", "Bearer " ++ airTableToken ) ]
                     }
                     |> BackendTask.allowFatal
             )
+
+
+getMusicians : List String -> BackendTask.BackendTask FatalError.FatalError (List Musician)
+getMusicians musicianIds =
+    BackendTask.Env.expect "AIRTABLE_JAZZ_TOKEN"
+        |> BackendTask.allowFatal
+        |> BackendTask.andThen
+            (\airTableToken ->
+                musicianIds
+                    |> List.map
+                        (\musicianId ->
+                            BackendTask.Http.getWithOptions
+                                { url = "https://api.airtable.com/v0/appNxan3bXZ81sXQn/Musicians/" ++ musicianId
+                                , timeoutInMs = Nothing
+                                , retries = Nothing
+                                , cachePath = Nothing
+                                , cacheStrategy = Nothing
+                                , expect = BackendTask.Http.expectJson singleMusicianDecoder
+                                , headers = [ ( "Authorization", "Bearer " ++ airTableToken ) ]
+                                }
+                                |> BackendTask.allowFatal
+                        )
+                    |> BackendTask.combine
+            )
+
+
+bandDecoder : Decoder Band
+bandDecoder =
+    Decode.field "fields" bandFieldsDecoder
+
+
+bandFieldsDecoder : Decoder Band
+bandFieldsDecoder =
+    Decode.map2 Band
+        (Decode.field "Band Name" Decode.string)
+        socialLinksDecoder
+
+
+singleMusicianDecoder : Decoder Musician
+singleMusicianDecoder =
+    Decode.field "fields" musicianDecoder
 
 
 musiciansDecoder : Decoder (List Musician)
