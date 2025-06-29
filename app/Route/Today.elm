@@ -7,12 +7,15 @@ module Route.Today exposing (Model, Msg, RouteParams, route, Data, ActionData)
 -}
 
 import BackendTask
+import BackendTask.Env
+import BackendTask.Http
 import Effect
 import FatalError
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Json.Decode as Decode exposing (Decoder)
 import Pages.Url
 import PagesMsg
 import Route
@@ -75,7 +78,7 @@ subscriptions routeParams path shared model =
 
 
 type alias Data =
-    {}
+    { musicians : List Musician }
 
 
 type alias ActionData =
@@ -84,7 +87,8 @@ type alias ActionData =
 
 data : BackendTask.BackendTask FatalError.FatalError Data
 data =
-    BackendTask.succeed {}
+    getMusicians
+        |> BackendTask.map (\musicians -> { musicians = musicians })
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -113,13 +117,13 @@ view :
 view app shared model =
     { title = "Today's Lineup"
     , body =
-        [ viewLineup
+        [ viewLineup app.data.musicians
         , Signup.view { firstName = Nothing, email = Nothing }
         ]
     }
 
 
-type alias Performer =
+type alias Musician =
     { name : String
     , instrument : String
     , socialLinks : List SocialLink
@@ -140,25 +144,10 @@ type SocialPlatform
     | Facebook
 
 
-todayPerformers : List Performer
-todayPerformers =
-    [ { name = "Dillon Kearns"
-      , instrument = "Piano"
-      , socialLinks =
-            [ { platform = Instagram, url = "https://instagram.com/dillonkearns" }
-            ]
-      }
-    , { name = "Alison Tuma"
-      , instrument = "Vocals"
-      , socialLinks =
-            [ { platform = Instagram, url = "https://www.instagram.com/msalisontuma/" }
-            ]
-      }
-    ]
 
 
-viewLineup : Html msg
-viewLineup =
+viewLineup : List Musician -> Html msg
+viewLineup musicians =
     Html.div
         [ Attr.class "bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
         ]
@@ -176,13 +165,13 @@ viewLineup =
             , Html.div
                 [ Attr.class "space-y-6 mt-12"
                 ]
-                (List.map viewPerformer todayPerformers)
+                (List.map viewMusician musicians)
             ]
         ]
 
 
-viewPerformer : Performer -> Html msg
-viewPerformer performer =
+viewMusician : Musician -> Html msg
+viewMusician musician =
     Html.div
         [ Attr.class "bg-gray-800 rounded-lg p-6 shadow-lg"
         ]
@@ -193,22 +182,22 @@ viewPerformer performer =
                 [ Html.h2
                     [ Attr.class "text-2xl font-semibold text-white"
                     ]
-                    [ Html.text performer.name ]
+                    [ Html.text musician.name ]
                 , Html.p
                     [ Attr.class "text-gray-400"
                     ]
-                    [ Html.text performer.instrument ]
+                    [ Html.text musician.instrument ]
                 ]
             ]
         , Html.div
             [ Attr.class "flex gap-x-4"
             ]
-            (List.map (viewSocialLink performer.name) performer.socialLinks)
+            (List.map (viewSocialLink musician.name) musician.socialLinks)
         ]
 
 
 viewSocialLink : String -> SocialLink -> Html msg
-viewSocialLink performerName link =
+viewSocialLink musicianName link =
     Html.a
         [ Attr.href link.url
         , Attr.target "_blank"
@@ -218,7 +207,7 @@ viewSocialLink performerName link =
         [ Html.span
             [ Attr.class "sr-only"
             ]
-            [ Html.text (performerName ++ " on " ++ socialPlatformToString link.platform) ]
+            [ Html.text (musicianName ++ " on " ++ socialPlatformToString link.platform) ]
         , socialIcon link.platform
         ]
 
@@ -324,3 +313,52 @@ websiteIcon =
             ]
             []
         ]
+
+
+getMusicians : BackendTask.BackendTask FatalError.FatalError (List Musician)
+getMusicians =
+    BackendTask.Env.expect "AIRTABLE_JAZZ_TOKEN"
+        |> BackendTask.allowFatal
+        |> BackendTask.andThen
+            (\airTableToken ->
+                BackendTask.Http.getWithOptions
+                    { url = "https://api.airtable.com/v0/appNxan3bXZ81sXQn/Musicians?view=Lineup"
+                    , timeoutInMs = Nothing
+                    , retries = Nothing
+                    , cachePath = Nothing
+                    , cacheStrategy = Nothing
+                    , expect = BackendTask.Http.expectJson musiciansDecoder
+                    , headers = [ ( "Authorization", "Bearer " ++ airTableToken ) ]
+                    }
+                    |> BackendTask.allowFatal
+            )
+
+
+musiciansDecoder : Decoder (List Musician)
+musiciansDecoder =
+    Decode.field "records" (Decode.list (Decode.field "fields" musicianDecoder))
+
+
+musicianDecoder : Decoder Musician
+musicianDecoder =
+    Decode.map3 Musician
+        (Decode.field "Name" Decode.string)
+        (Decode.field "Instrument" Decode.string)
+        socialLinksDecoder
+
+
+socialLinksDecoder : Decoder (List SocialLink)
+socialLinksDecoder =
+    Decode.map4
+        (\instagram facebook youtube website ->
+            [ Maybe.map (SocialLink Instagram) instagram
+            , Maybe.map (SocialLink Facebook) facebook
+            , Maybe.map (SocialLink YouTube) youtube
+            , Maybe.map (SocialLink Website) website
+            ]
+                |> List.filterMap identity
+        )
+        (Decode.maybe (Decode.field "Instagram" Decode.string))
+        (Decode.maybe (Decode.field "Facebook" Decode.string))
+        (Decode.maybe (Decode.field "YouTube" Decode.string))
+        (Decode.maybe (Decode.field "Website" Decode.string))
