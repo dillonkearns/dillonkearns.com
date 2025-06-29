@@ -13,14 +13,14 @@ import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr
-import Signup
-import Svg exposing (path, svg)
-import Svg.Attributes as SvgAttr
 import Pages.Url
 import PagesMsg
 import Route
 import RouteBuilder
 import Shared
+import Signup
+import Svg exposing (path, svg)
+import Svg.Attributes as SvgAttr
 import UrlPath
 import View
 
@@ -113,8 +113,8 @@ view :
 view app shared model =
     { title = "Today's Lineup"
     , body =
-        [ Signup.view { firstName = Nothing, email = Nothing }
-        , viewLineup
+        [ viewLineup
+        , Signup.view { firstName = Nothing, email = Nothing }
         ]
     }
 
@@ -160,7 +160,7 @@ todayPerformers =
 viewLineup : Html msg
 viewLineup =
     Html.div
-        [ Attr.class "min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
+        [ Attr.class "bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
         ]
         [ Html.div
             [ Attr.class "max-w-3xl mx-auto"
