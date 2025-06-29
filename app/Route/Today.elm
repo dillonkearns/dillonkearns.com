@@ -540,7 +540,24 @@ bandFieldsDecoder : Decoder Band
 bandFieldsDecoder =
     Decode.map2 Band
         (Decode.field "Band Name" Decode.string)
-        socialLinksDecoder
+        bandSocialLinksDecoder
+
+
+bandSocialLinksDecoder : Decoder (List SocialLink)
+bandSocialLinksDecoder =
+    Decode.map4
+        (\instagram facebook youtube website ->
+            [ Maybe.map (SocialLink Instagram) instagram
+            , Maybe.map (SocialLink Facebook) facebook
+            , Maybe.map (SocialLink YouTube) youtube
+            , Maybe.map (SocialLink Website) website
+            ]
+                |> List.filterMap identity
+        )
+        (Decode.maybe (Decode.field "Instagram" Decode.string))
+        (Decode.maybe (Decode.field "Facebook" Decode.string))
+        (Decode.maybe (Decode.field "YouTube" Decode.string))
+        (Decode.maybe (Decode.field "Website" Decode.string))
 
 
 singleMusicianDecoder : Decoder Musician
