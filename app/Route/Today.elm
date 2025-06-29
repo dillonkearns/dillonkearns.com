@@ -581,12 +581,7 @@ musicianDecoder =
 
 headshotDecoder : Decoder (Maybe String)
 headshotDecoder =
-    Decode.maybe 
-        (Decode.field "Headshot" 
-            (Decode.index 0 
-                (Decode.field "url" Decode.string)
-            )
-        )
+    Decode.maybe (Decode.field "Headshot" Decode.string)
 
 
 socialLinksDecoder : Decoder (List SocialLink)
