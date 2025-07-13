@@ -146,10 +146,10 @@ head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
 head app =
     Seo.summaryLarge
         { canonicalUrlOverride = Nothing
-        , siteName = "Today's Lineup"
+        , siteName = "Meet the Band"
         , image =
             { url = "https://res.cloudinary.com/dillonkearns/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1742066379/hero-color_oh0rng.jpg" |> Pages.Url.external
-            , alt = "Today's Lineup"
+            , alt = "Meet the Band"
             , dimensions = Nothing
             , mimeType = Nothing
             }
@@ -166,7 +166,7 @@ view :
     -> Model
     -> View.View (PagesMsg.PagesMsg Msg)
 view app shared model =
-    { title = "Today's Lineup"
+    { title = "Meet the Band"
     , body =
         case app.data.todayEvent of
             Just event ->
@@ -176,7 +176,7 @@ view app shared model =
 
             Nothing ->
                 [ Html.div
-                    [ Attr.class "bg-white min-h-screen py-12 px-4 text-center" ]
+                    [ Attr.class "bg-white py-12 px-4 text-center" ]
                     [ Html.h1
                         [ Attr.class "text-3xl font-bold text-gray-900" ]
                         [ Html.text "No event scheduled for today" ]
@@ -197,6 +197,7 @@ type alias Musician =
 type alias Band =
     { name : String
     , socialLinks : List SocialLink
+    , avatar : Maybe String
     }
 
 
@@ -217,7 +218,7 @@ type SocialPlatform
 viewLineup : Time.Zone -> Event.Event -> Maybe Band -> List Musician -> Html msg
 viewLineup zone event maybeBand musicians =
     Html.div
-        [ Attr.class "bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8"
+        [ Attr.class "bg-white py-12 px-4 sm:px-6 lg:px-8"
         ]
         [ Html.div
             [ Attr.class "max-w-4xl mx-auto"
@@ -225,27 +226,28 @@ viewLineup zone event maybeBand musicians =
             [ Html.h1
                 [ Attr.class "text-5xl font-bold text-center text-gray-900 mb-8"
                 ]
-                [ Html.text "Today's Lineup" ]
-            , Html.p
-                [ Attr.class "text-center text-gray-600 mb-2 text-xl font-medium"
-                ]
-                [ Html.text event.name ]
-            , Html.p
-                [ Attr.class "text-center text-gray-500 mb-16 text-lg"
-                ]
-                [ Html.text (formatEventTime zone event.dateTimeStart ++ " • " ++ event.location.name) ]
+                [ Html.text "Meet the Band" ]
+
+            --, Html.p
+            --    [ Attr.class "text-center text-gray-600 mb-2 text-xl font-medium"
+            --    ]
+            --    [ Html.text event.name ]
+            --, Html.p
+            --    [ Attr.class "text-center text-gray-500 mb-16 text-lg"
+            --    ]
+            --    [ Html.text (formatEventTime zone event.dateTimeStart ++ " • " ++ event.location.name) ]
             , case maybeBand of
                 Just band ->
                     Html.div []
-                        [ Html.h2
-                            [ Attr.class "text-3xl font-bold text-gray-900 mb-8"
-                            ]
-                            [ Html.text "Featured Band" ]
-                        , viewBand band
+                        [ --Html.h2
+                          --   [ Attr.class "text-3xl font-bold text-gray-900 mb-8"
+                          --   ]
+                          --   [ Html.text "Featured Band" ]
+                          viewBand band
                         , Html.h2
                             [ Attr.class "text-3xl font-bold text-gray-900 mt-16 mb-8"
                             ]
-                            [ Html.text "Musicians Playing the Gig" ]
+                            [ Html.text "Musicians" ]
                         , Html.div
                             [ Attr.class "space-y-8"
                             ]
@@ -294,14 +296,24 @@ viewBand band =
         [ Html.div
             [ Attr.class "flex items-center gap-6 mb-6"
             ]
-            [ Html.div
-                [ Attr.class "w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0"
-                ]
-                [ Html.span
-                    [ Attr.class "text-gray-600 text-2xl font-bold"
-                    ]
-                    [ Html.text (String.left 1 band.name) ]
-                ]
+            [ case band.avatar of
+                Just avatarUrl ->
+                    Html.img
+                        [ Attr.src avatarUrl
+                        , Attr.alt (band.name ++ " logo")
+                        , Attr.class "w-20 h-20 rounded-full object-cover flex-shrink-0"
+                        ]
+                        []
+
+                Nothing ->
+                    Html.div
+                        [ Attr.class "w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0"
+                        ]
+                        [ Html.span
+                            [ Attr.class "text-gray-600 text-2xl font-bold"
+                            ]
+                            [ Html.text (String.left 1 band.name) ]
+                        ]
             , Html.div []
                 [ Html.h3
                     [ Attr.class "text-3xl font-bold text-gray-900 mb-1"
@@ -538,9 +550,10 @@ bandDecoder =
 
 bandFieldsDecoder : Decoder Band
 bandFieldsDecoder =
-    Decode.map2 Band
+    Decode.map3 Band
         (Decode.field "Band Name" Decode.string)
         bandSocialLinksDecoder
+        (Decode.maybe (Decode.field "Avatar" Decode.string))
 
 
 bandSocialLinksDecoder : Decoder (List SocialLink)
