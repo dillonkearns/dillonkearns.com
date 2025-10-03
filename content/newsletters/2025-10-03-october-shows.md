@@ -2,14 +2,14 @@
 title: "Live Jazz in October"
 ---
 
-I hope you are enjoying the cozy fall vibes here in Santa Barbara! This month is shaping up to be full of music. We hosted a jazz jam at The Blue Owl last night - we kept it low key for the first event, but it may turn into a recurring event on first Thursdays at 6:00, and we will be promoting it more the next time around. Stay tuned for more on that!
+I hope you are enjoying the cozy fall vibes here in Santa Barbara! This month is shaping up to be full of music. Brandon Kinalele and I hosted a jazz jam at The Blue Owl last night - we kept it low key for the first event, but it may turn into a recurring event on first Thursdays at 6:00, and we will be promoting it more the next time around. Stay tuned for more on that!
 
 I'd love to see you at one (or more!) of these upcoming shows.
 
 ## October Shows
 
 ### Soir Noir at Linden Square
-**Monday, October 6** | 5:30-7:30pm  
+**Monday, October 6** | 5:30-8:00pm  
 **Linden Square, Carpinteria**
 
 This Monday is our debut at Linden Square - a beautiful new venue in Carpinteria that's similar to the Santa Barbara Public Market. Third Window Brewery serves incredible smash burgers, and Corazon Cocina Sur has fantastic Mexican cuisine. It is a really hip and pleasant vibe out there, a lovely place to enjoy some live music.
@@ -18,7 +18,7 @@ This Monday is our debut at Linden Square - a beautiful new venue in Carpinteria
 **Monday, October 13** | 7:00-9:00pm  
 **SOhO Restaurant & Music Club**
 
-The following Monday, I'll be playing with the Lunch Break Big Band. our set has some real swingin' tunes!
+The following Monday, I'll be playing with the Lunch Break Big Band. Our set has some real swingin' tunes!
 
 
 ### Soir Noir at Villa Wine Bar
@@ -29,7 +29,13 @@ This will be our first Soir Noir show at Villa Wine Bar, looking forward to play
 
 ## What We're Working On
 
-We've been doing a deep dive on Brazilian jazz lately, preparing an all-Bossa Nova and Samba program for an [upcoming fundraiser event for Jodi House](https://www.jodihouse.org/special-events). We'll be performing as a quartet, and we'll also be working some of these Jobim classics and other Bossa tunes into our other sets this month.
+Brandon and I have been doing a deep dive on Brazilian jazz with Soir Noir lately, preparing an all-Bossa Nova and Samba program for an [upcoming fundraiser event for Jodi House](https://www.jodihouse.org/special-events). We'll be performing as a quartet, and we'll also be working some of these Jobim classics and other Bossa tunes into our other sets this month.
+
+## A Taste of Soir Noir
+
+I've been trying to start posting gig clips on YouTube. Here's one of my favorite recordings from a Soir Noir show we did at Fox Wine Co. of "My Funny Valentine".
+
+<youtube-embed src="https://www.youtube.com/watch?v=4-pFT1gSXcA"></youtube-embed>
 
 Hope to see you soon!
 
