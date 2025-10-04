@@ -319,9 +319,14 @@ eventView zone event =
                              --Attr.datetime event.dateTimeISO
                             ]
                             [ Html.text
-                                (formatTime zone event.dateTimeStart
-                                    ++ " - "
-                                    ++ formatTime zone event.dateTimeEnd
+                                (case event.dateTimeEnd of
+                                    Just endTime ->
+                                        formatTime zone event.dateTimeStart
+                                            ++ " - "
+                                            ++ formatTime zone endTime
+
+                                    Nothing ->
+                                        "TBD"
                                 )
                             ]
                         ]
@@ -338,15 +343,20 @@ eventView zone event =
                             ]
                         ]
                     ]
-                , Html.div [ Attr.class "mt-2 flex items-start gap-x-3 xl:mt-0 xl:ml-3.5 xl:border-l xl:border-gray-400/50 xl:pl-3.5" ]
-                    [ Html.a
-                        [ Attr.href (Event.addToGoogleCalendarUrl zone event)
-                        , Attr.class "inline-flex items-center gap-x-2 rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        , Attr.target "_blank"
-                        ]
-                        [ Html.text "Add to Google Calendar"
-                        ]
-                    ]
+                , case event.dateTimeEnd of
+                    Just _ ->
+                        Html.div [ Attr.class "mt-2 flex items-start gap-x-3 xl:mt-0 xl:ml-3.5 xl:border-l xl:border-gray-400/50 xl:pl-3.5" ]
+                            [ Html.a
+                                [ Attr.href (Event.addToGoogleCalendarUrl zone event)
+                                , Attr.class "inline-flex items-center gap-x-2 rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                , Attr.target "_blank"
+                                ]
+                                [ Html.text "Add to Google Calendar"
+                                ]
+                            ]
+
+                    Nothing ->
+                        Html.text ""
                 ]
             ]
         ]
@@ -498,30 +508,44 @@ nextEventBanner events zone =
 
 formatEventDate : Time.Zone -> Event -> String
 formatEventDate zone event =
-    DateFormat.format
-        [ DateFormat.dayOfWeekNameFull
-        , DateFormat.text ", "
-        , DateFormat.monthNameFull
-        , DateFormat.text " "
-        , DateFormat.dayOfMonthNumber
-        , DateFormat.text ", "
-        , DateFormat.hourFixed
-        , DateFormat.text ":"
-        , DateFormat.minuteFixed
-        , DateFormat.text "–"
-        ]
-        zone
-        event.dateTimeStart
-        ++ DateFormat.format
-            [ DateFormat.hourFixed
-            , DateFormat.text ":"
-            , DateFormat.minuteFixed
-            , DateFormat.text " "
-            , DateFormat.amPmUppercase
-            ]
-            zone
-            event.dateTimeEnd
-        ++ "."
+    case event.dateTimeEnd of
+        Just endTime ->
+            DateFormat.format
+                [ DateFormat.dayOfWeekNameFull
+                , DateFormat.text ", "
+                , DateFormat.monthNameFull
+                , DateFormat.text " "
+                , DateFormat.dayOfMonthNumber
+                , DateFormat.text ", "
+                , DateFormat.hourFixed
+                , DateFormat.text ":"
+                , DateFormat.minuteFixed
+                , DateFormat.text "–"
+                ]
+                zone
+                event.dateTimeStart
+                ++ DateFormat.format
+                    [ DateFormat.hourFixed
+                    , DateFormat.text ":"
+                    , DateFormat.minuteFixed
+                    , DateFormat.text " "
+                    , DateFormat.amPmUppercase
+                    ]
+                    zone
+                    endTime
+                ++ "."
+
+        Nothing ->
+            DateFormat.format
+                [ DateFormat.dayOfWeekNameFull
+                , DateFormat.text ", "
+                , DateFormat.monthNameFull
+                , DateFormat.text " "
+                , DateFormat.dayOfMonthNumber
+                , DateFormat.text " (TBD)"
+                ]
+                zone
+                event.dateTimeStart
 
 
 socialIcons : Bool -> List (Html msg)

@@ -14,7 +14,7 @@ import Url
 type alias Event =
     { name : String
     , dateTimeStart : Time.Posix
-    , dateTimeEnd : Time.Posix
+    , dateTimeEnd : Maybe Time.Posix
     , location : Venue
     , bandId : Maybe String -- ID of the linked band record
     , musicianIds : List String -- IDs of the linked musician records
@@ -54,6 +54,18 @@ addToGoogleCalendarUrl zone event =
 
                 Nothing ->
                     ""
+
+        endTimeString =
+            case event.dateTimeEnd of
+                Just endTime ->
+                    formatGoogleTime zone endTime
+
+                Nothing ->
+                    -- If no end time, use start time + 2 hours as default
+                    formatGoogleTime zone
+                        (Time.millisToPosix
+                            (Time.posixToMillis event.dateTimeStart + (2 * 60 * 60 * 1000))
+                        )
     in
     "https://calendar.google.com/calendar/render?action=TEMPLATE"
         ++ "&text="
@@ -61,7 +73,7 @@ addToGoogleCalendarUrl zone event =
         ++ "&dates="
         ++ formatGoogleTime zone event.dateTimeStart
         ++ "/"
-        ++ formatGoogleTime zone event.dateTimeEnd
+        ++ endTimeString
         ++ "&location="
         ++ Url.percentEncode event.location.googleMapsNameWithAddress
         ++ detailsParam
@@ -84,15 +96,25 @@ recordDecoder =
         (Decode.succeed Nothing {- TODO -})
 
 
-endTimeDecoder : Decoder Posix
+endTimeDecoder : Decoder (Maybe Posix)
 endTimeDecoder =
-    Decode.map2
-        (\startTime durationSecs ->
-            Time.millisToPosix
-                (Time.posixToMillis startTime + (durationSecs * 1000))
-        )
-        (Decode.field "Start Date/Time" Iso8601.decoder)
-        (Decode.field "Duration" Decode.int)
+    Decode.maybe (Decode.field "Duration" Decode.int)
+        |> Decode.andThen
+            (\maybeDuration ->
+                case maybeDuration of
+                    Just durationSecs ->
+                        Decode.map
+                            (\startTime ->
+                                Just
+                                    (Time.millisToPosix
+                                        (Time.posixToMillis startTime + (durationSecs * 1000))
+                                    )
+                            )
+                            (Decode.field "Start Date/Time" Iso8601.decoder)
+
+                    Nothing ->
+                        Decode.succeed Nothing
+            )
 
 
 venueDecoder : Decoder Venue
