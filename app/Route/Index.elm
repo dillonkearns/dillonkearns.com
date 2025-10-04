@@ -365,10 +365,9 @@ eventView zone event =
 formatTime : Time.Zone -> Time.Posix -> String
 formatTime zone dateTime =
     DateFormat.format
-        [ DateFormat.hourFixed
+        [ DateFormat.hourNumber
         , DateFormat.text ":"
         , DateFormat.minuteFixed
-        , DateFormat.text " "
         , DateFormat.amPmLowercase
         ]
         zone
@@ -517,7 +516,7 @@ formatEventDate zone event =
                 , DateFormat.text " "
                 , DateFormat.dayOfMonthNumber
                 , DateFormat.text ", "
-                , DateFormat.hourFixed
+                , DateFormat.hourNumber
                 , DateFormat.text ":"
                 , DateFormat.minuteFixed
                 , DateFormat.text "–"
@@ -525,11 +524,10 @@ formatEventDate zone event =
                 zone
                 event.dateTimeStart
                 ++ DateFormat.format
-                    [ DateFormat.hourFixed
+                    [ DateFormat.hourNumber
                     , DateFormat.text ":"
                     , DateFormat.minuteFixed
-                    , DateFormat.text " "
-                    , DateFormat.amPmUppercase
+                    , DateFormat.amPmLowercase
                     ]
                     zone
                     endTime
