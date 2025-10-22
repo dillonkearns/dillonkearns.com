@@ -19,18 +19,17 @@ import Shared
 import Signup
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
-import Task
 import Time
+import TimeZone
 import View exposing (View)
 
 
 type alias Model =
-    { zone : Time.Zone
-    }
+    {}
 
 
 type Msg
-    = GotTimezone Time.Zone
+    = NoOp
 
 
 type alias RouteParams =
@@ -65,9 +64,8 @@ init :
     -> Shared.Model
     -> ( Model, Effect Msg )
 init app shared =
-    ( { zone = Time.utc
-      }
-    , Effect.fromCmd (Time.here |> Task.perform GotTimezone)
+    ( {}
+    , Effect.none
     )
 
 
@@ -79,8 +77,8 @@ update :
     -> ( Model, Effect Msg )
 update app shared msg model =
     case msg of
-        GotTimezone zone ->
-            ( { model | zone = zone }, Effect.none )
+        NoOp ->
+            ( model, Effect.none )
 
 
 data : BackendTask FatalError Data
@@ -146,7 +144,7 @@ view app shared model =
                                 ]
                                 (socialIcons False)
                             ]
-                        , nextEventBanner app.data.events model.zone
+                        , nextEventBanner app.data.events (TimeZone.america__los_angeles ())
                         , Html.h1
                             [ Attr.class "mt-12 text-5xl font-semibold tracking-tight text-pretty text-gray-900 sm:mt-10 sm:text-7xl"
                             ]
@@ -189,7 +187,7 @@ view app shared model =
             ]
         , Html.div [ Attr.class "mt-8" ] [ Signup.view { firstName = Nothing, email = Nothing } ]
         , videoSection
-        , eventsSection app.data.events model.zone
+        , eventsSection app.data.events (TimeZone.america__los_angeles ())
         , Footer.footer True
         ]
     }

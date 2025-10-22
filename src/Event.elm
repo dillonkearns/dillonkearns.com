@@ -8,6 +8,7 @@ import FatalError exposing (FatalError)
 import Iso8601
 import Json.Decode as Decode exposing (Decoder)
 import Time exposing (Posix, Zone)
+import TimeZone
 import Url
 
 
